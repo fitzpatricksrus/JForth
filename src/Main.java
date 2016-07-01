@@ -1,6 +1,6 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /*
 
@@ -48,109 +48,129 @@ import java.util.Arrays;
 
  */
 
-
-class Word {
-    private String name;
-    public String getName() {
-        return name;
-    }
-    public void execute(ExecutionContext context) {
-    }
-}
-
-class ExecutionContext {
-	// hey jf - make this a proper linked stack list
-	public int index;
-	public CompositeWord caller;
-	public Vocabulary vocab;
-	public Terminal terminal;
-
-	public ExecutionContext(ExecutionContext other) {
-		index = other.index;
-		caller = other.caller;
-		vocab = other.vocab;
-		terminal = other.terminal;
-	}
-	public ExecutionContext(ExecutionContext other, CompositeWord newCaller) {
-		index = other.index;
-		caller = newCaller;
-		vocab = other.vocab;
-		terminal = other.terminal;
-	}
-}
-
-class CompositeWord extends Word {
-    private ArrayList<Word> words = new ArrayList<>();
-    public CompositeWord() {
-    }
-
-    public CompositeWord(Word[] words) {
-        this.words.addAll(Arrays.asList(words));
-    }
-
-    public void appendWord(Word word) {
-        words.add(word);
-    }
-
-    @Override
-    public void execute(ExecutionContext contextIn) {
-		ExecutionContext context = new ExecutionContext(contextIn, this);
-        for (context.index = 0; context.index < words.size(); context.index++ ) {
-			Word w = words.get(context.index);
-            w.execute(context);
-        }
-    }
-}
-
-interface Vocabulary {
-    public Word searchWord(String name);
-    public class EmptyVocabulary implements Vocabulary {
-        public Word searchWord(String name) {
-            return null;
-        }
-    }
-    public static Vocabulary EMPTY = new EmptyVocabulary();
-}
-
-class VocabularyExtension implements Vocabulary {
-    private Vocabulary parent;
-    private HashMap<String, Word> wordList;
-
-    public VocabularyExtension() {
-        this.parent = Vocabulary.EMPTY;
-        this.wordList = new HashMap<>();
-    }
-
-    public VocabularyExtension(Vocabulary parent) {
-        this.parent = parent;
-        this.wordList = new HashMap<>();
-    }
-
-    public void addWord(Word word) {
-        wordList.put(word.getName(), word);
-    }
-    public void removeWord(Word word) {
-        wordList.remove(word.getName());
-    }
-    public Word getWord(String name) {
-        return wordList.get(name);
-    }
-    public Word searchWord(String name) {
-        Word word = getWord(name);
-        if (word != null) {
-            return word;
-        } else {
-            return parent.searchWord(name);
-        }
-    }
-}
-
-interface Terminal {
-    public String nextToken();
-    public void print(String message);
-}
-
 public class Main {
+
+	public class Word {
+		public String getName() {
+			return getClass().getName();
+		}
+
+		public void execute(ExecutionContext context) {
+		}
+	}
+
+	public class ExecutionContext extends Word {
+		private ExecutionContext parent;
+		public int index;
+		public CompositeWord caller;
+		public Vocabulary vocab;
+		public Terminal terminal;
+
+		public ExecutionContext(Vocabulary vocab, Terminal terminal) {
+			parent = null;
+			index = 0;
+			caller = null;
+			this.vocab = vocab;
+			this.terminal = terminal;
+		}
+
+		public ExecutionContext(ExecutionContext other) {
+			parent = other;
+			index = 0;
+			caller = other.caller;
+			vocab = other.vocab;
+			terminal = other.terminal;
+		}
+	}
+
+	public class CompositeWord extends Word {
+		private String name;
+		private ArrayList<Word> words = new ArrayList<>();
+
+		public CompositeWord(String name) {
+			this.name = name;
+		}
+
+		public CompositeWord(String name, Word[] words) {
+			this.name = name;
+			this.words.addAll(Arrays.asList(words));
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void appendWord(Word word) {
+			words.add(word);
+		}
+
+		@Override
+		public void execute(ExecutionContext contextIn) {
+			ExecutionContext context = new ExecutionContext(contextIn);
+			context.caller = this;
+			for (context.index = 0; context.index < words.size(); context.index++) {
+				Word w = words.get(context.index);
+				w.execute(context);
+			}
+		}
+	}
+
+	public interface Vocabulary {
+		public Word searchWord(String name);
+
+		public class EmptyVocabulary implements Vocabulary {
+			@Override
+			public Word searchWord(String name) {
+				return null;
+			}
+		}
+
+		public static Vocabulary EMPTY = new EmptyVocabulary();
+	}
+
+	public class VocabularyExtension implements Vocabulary {
+		private Vocabulary parent;
+		private HashMap<String, Word> wordList;
+
+		public VocabularyExtension() {
+			this.parent = Vocabulary.EMPTY;
+			this.wordList = new HashMap<>();
+		}
+
+		public VocabularyExtension(Vocabulary parent) {
+			this.parent = parent;
+			this.wordList = new HashMap<>();
+		}
+
+		public void addWord(Word word) {
+			wordList.put(word.getName(), word);
+		}
+
+		public void removeWord(Word word) {
+			wordList.remove(word.getName());
+		}
+
+		public Word getWord(String name) {
+			return wordList.get(name);
+		}
+
+		@Override
+		public Word searchWord(String name) {
+			Word word = getWord(name);
+			if (word != null) {
+				return word;
+			} else {
+				return parent.searchWord(name);
+			}
+		}
+	}
+
+	public interface Terminal {
+		public String nextToken();
+
+		public void print(String message);
+	}
+
 	public static void main(String args[]) {
 		System.out.println("Hello world.");
 	}
