@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /*
 
@@ -61,10 +62,10 @@ public class Main {
 
 	public class ExecutionContext extends Word {
 		private ExecutionContext parent;
-		public int index;
-		public CompositeWord caller;
-		public Vocabulary vocab;
-		public Terminal terminal;
+		private int index;
+		private CompositeWord caller;
+		private Vocabulary vocab;
+		private Terminal terminal;
 
 		public ExecutionContext(Vocabulary vocab, Terminal terminal) {
 			parent = null;
@@ -80,6 +81,38 @@ public class Main {
 			caller = other.caller;
 			vocab = other.vocab;
 			terminal = other.terminal;
+		}
+		
+		public ExecutionContext getParent() {
+			return parent;
+		}
+
+		public void setTerminal(Terminal terminal) {
+			this.terminal = terminal;
+		}
+
+		public Terminal getTerminal() {
+			return terminal;
+		}
+
+		public void setVocab(Vocabulary vocab) {
+			this.vocab = vocab;
+		}
+
+		public Vocabulary getVocab() {
+			return vocab;
+		}
+
+		public void setCaller(CompositeWord caller) {
+			this.caller = caller;
+		}
+
+		public CompositeWord getCaller() {
+			return caller;
+		}
+		
+		public void branch(int offset) {
+			index = index + offset;
 		}
 	}
 
@@ -107,7 +140,7 @@ public class Main {
 		@Override
 		public void execute(ExecutionContext contextIn) {
 			ExecutionContext context = new ExecutionContext(contextIn);
-			context.caller = this;
+			context.setCaller(this);
 			for (context.index = 0; context.index < words.size(); context.index++) {
 				Word w = words.get(context.index);
 				w.execute(context);
@@ -150,13 +183,13 @@ public class Main {
 			wordList.remove(word.getName());
 		}
 
-		public Word getWord(String name) {
+		public Word getLocalWord(String name) {
 			return wordList.get(name);
 		}
 
 		@Override
 		public Word searchWord(String name) {
-			Word word = getWord(name);
+			Word word = getLocalWord(name);
 			if (word != null) {
 				return word;
 			} else {
@@ -165,13 +198,60 @@ public class Main {
 		}
 	}
 
-	public interface Terminal {
-		public String nextToken();
+	
+	private static String operator = "([\\+-<>,.=!@#$%^&*\\(\\)\\[\\]\\{\\}]+)";
+	private static String keyword = "(\\w+\\:)";
+	
+	public static class Terminal {
+		public enum TokenType {
+			NUMBER,
+			OPERATOR,
+			KEWORD,
+		}
+		
+		public static class Token {
+			public TokenType type;
+			public String value;
+			public int intValue;
+			
+			public Token(TokenType type, String value) {
+				this.type = type;
+				this.value= value;
+			}
+			public Token(TokenType type, int value) {
+				this.type = type;
+				this.intValue= value;
+			}
+			public String toString() {
+				return "Token("+type+", "+value+", "+intValue+")";
+			}
+		}
+		
+		Scanner inputScanner = new Scanner(System.in);
+		public Terminal() {
+		}
+		
+		public Token nextToken() {
+			if (inputScanner.hasNextInt()) {
+				return new Token(TokenType.NUMBER, inputScanner.nextInt());
+			} else if (inputScanner.hasNext(operator)) {
+				return new Token(TokenType.OPERATOR, inputScanner.next(operator));
+			} else {
+				return new Token(TokenType.KEWORD, inputScanner.next());
+			}
+		}
 
-		public void print(String message);
+		public void print(String message) {
+			System.out.println(message);
+		}
 	}
 
 	public static void main(String args[]) {
+		Terminal t = new Terminal();
 		System.out.println("Hello world.");
+		while (true) {
+			t.print(t.nextToken().toString());
+			t.print("\n");
+		}
 	}
 }
