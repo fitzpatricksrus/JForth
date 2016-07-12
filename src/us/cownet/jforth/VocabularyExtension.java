@@ -24,10 +24,6 @@ public class VocabularyExtension implements Vocabulary {
 		wordList.remove(word.getName());
 	}
 
-	public Word getLocalWord(String name) {
-		return wordList.get(name);
-	}
-
 	@Override
 	public Word searchWord(String name) {
 		Word word = getLocalWord(name);
@@ -36,6 +32,10 @@ public class VocabularyExtension implements Vocabulary {
 		} else {
 			return parent.searchWord(name);
 		}
+	}
+
+	public Word getLocalWord(String name) {
+		return wordList.get(name);
 	}
 }
 

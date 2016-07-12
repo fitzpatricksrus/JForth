@@ -20,17 +20,16 @@ public class CompositeWord extends Word {
 		return name;
 	}
 
-	public void appendWord(Word word) {
-		words.add(word);
+	@Override
+	public void execute(ExecutionContext context) {
+		ExecutionContext newContext = new ExecutionContext(context, this);
+		for (newContext.index = 0; newContext.index < words.size(); newContext.index++) {
+			Word w = words.get(newContext.index);
+			w.execute(newContext);
+		}
 	}
 
-	@Override
-	public void execute(ExecutionContext contextIn) {
-		ExecutionContext context = new ExecutionContext(contextIn);
-		context.setCaller(this);
-		for (context.index = 0; context.index < words.size(); context.index++) {
-			Word w = words.get(context.index);
-			w.execute(context);
-		}
+	public void appendWord(Word word) {
+		words.add(word);
 	}
 }
