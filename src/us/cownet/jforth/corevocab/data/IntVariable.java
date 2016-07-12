@@ -1,6 +1,7 @@
 package us.cownet.jforth.corevocab.data;
 
 import us.cownet.jforth.ExecutionContext;
+import us.cownet.jforth.SimpleVocabulary;
 import us.cownet.jforth.Word;
 
 public class IntVariable extends Word {
@@ -27,7 +28,32 @@ public class IntVariable extends Word {
 	}
 
 	public Word getSetter() {
-		return new IntSet();
+		return new IntSave();
+	}
+
+	public SimpleVocabulary getVocabulary() {
+		SimpleVocabulary v = new SimpleVocabulary();
+		v.addWord(new IntNegate());
+		v.addWord(new IntNot());
+		v.addWord(new IntPlus());
+		v.addWord(new IntMinus());
+		v.addWord(new IntTimes());
+		v.addWord(new IntDivide());
+		v.addWord(new IntMod());
+		v.addWord(new IntOr());
+		v.addWord(new IntAnd());
+		v.addWord(new IntXor());
+		v.addWord(new IntShift());
+		v.addWord(new IntSave());
+		return v;
+	}
+
+	public static class IntSave extends Word {
+		public void execute(ExecutionContext context) {
+			IntVariable dest = (IntVariable) context.popTemp();
+			IntVariable value = (IntVariable) context.popTemp();
+			dest.value = value.value;
+		}
 	}
 
 	public static abstract class UnaryOperator extends Word {
@@ -114,14 +140,5 @@ public class IntVariable extends Word {
 			return v1 << v2;
 		}
 	}
-
-	public class IntSet extends Word {
-		public void execute(ExecutionContext context) {
-			IntVariable v = (IntVariable) context.popTemp();
-			value = v.value;
-		}
-	}
-
-
 }
 
