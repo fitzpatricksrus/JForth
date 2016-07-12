@@ -1,38 +1,19 @@
 package us.cownet.jforth.corevocab.data;
 
-import us.cownet.jforth.ExecutionContext;
 import us.cownet.jforth.SimpleVocabulary;
 import us.cownet.jforth.Word;
 
-public class IntVariable extends Word {
-	private int value;
-
+public class IntVariable extends DataWord<Integer> {
 	public IntVariable() {
-		value = 0;
+		super(0);
 	}
 
 	public IntVariable(int value) {
-		this.value = value;
+		super(value);
 	}
 
-	public void execute(ExecutionContext context) {
-		context.pushTemp(this);
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int newValue) {
-		value = newValue;
-	}
-
-	public Word getSetter() {
-		return new IntSave();
-	}
-
-	public SimpleVocabulary getVocabulary() {
-		SimpleVocabulary v = new SimpleVocabulary();
+	public SimpleVocabulary constructVocabContents() {
+		SimpleVocabulary v = super.constructVocabulary();
 		v.addWord(new IntNegate());
 		v.addWord(new IntNot());
 		v.addWord(new IntPlus());
@@ -44,100 +25,93 @@ public class IntVariable extends Word {
 		v.addWord(new IntAnd());
 		v.addWord(new IntXor());
 		v.addWord(new IntShift());
-		v.addWord(new IntSave());
+		v.addWord(new IntGreaterThan());
+		v.addWord(new IntLessThan());
+		v.addWord(new IntEquals());
 		return v;
 	}
 
-	public static class IntSave extends Word {
-		public void execute(ExecutionContext context) {
-			IntVariable dest = (IntVariable) context.popTemp();
-			IntVariable value = (IntVariable) context.popTemp();
-			dest.value = value.value;
+	public static class IntNegate extends UnaryOperator<Integer> {
+		protected Word operate(Integer value) {
+			return new IntVariable(-value);
 		}
 	}
 
-	public static abstract class UnaryOperator extends Word {
-		public void execute(ExecutionContext context) {
-			IntVariable v = (IntVariable) context.popTemp();
-			context.pushTemp(new IntVariable(operate(v.value)));
-		}
-
-		protected abstract int operate(int value);
-	}
-
-	public static class IntNegate extends UnaryOperator {
-		protected int operate(int value) {
-			return -value;
+	public static class IntNot extends UnaryOperator<Integer> {
+		protected Word operate(Integer value) {
+			return new IntVariable(~value);
 		}
 	}
 
-	public static class IntNot extends UnaryOperator {
-		protected int operate(int value) {
-			return ~value;
+	public static class IntPlus extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 + v2);
 		}
 	}
 
-	public static abstract class BinaryOperator extends Word {
-		public void execute(ExecutionContext context) {
-			IntVariable v1 = (IntVariable) context.popTemp();
-			IntVariable v2 = (IntVariable) context.popTemp();
-			context.pushTemp(new IntVariable(operate(v1.value, v2.value)));
-		}
-
-		protected abstract int operate(int v1, int v2);
-	}
-
-	public static class IntPlus extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 + v2;
+	public static class IntMinus extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 - v2);
 		}
 	}
 
-	public static class IntMinus extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 - v2;
+	public static class IntTimes extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 * v2);
 		}
 	}
 
-	public static class IntTimes extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 * v2;
+	public static class IntDivide extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 / v2);
 		}
 	}
 
-	public static class IntDivide extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 / v2;
+	public static class IntMod extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 % v2);
 		}
 	}
 
-	public static class IntMod extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 % v2;
+	public static class IntOr extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 | v2);
 		}
 	}
 
-	public static class IntOr extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 | v2;
+	public static class IntAnd extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 & v2);
 		}
 	}
 
-	public static class IntAnd extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 & v2;
+	public static class IntXor extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 ^ v2);
 		}
 	}
 
-	public static class IntXor extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 ^ v2;
+	public static class IntShift extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new IntVariable(v1 << v2);
 		}
 	}
 
-	public static class IntShift extends BinaryOperator {
-		protected int operate(int v1, int v2) {
-			return v1 << v2;
+	public static class IntGreaterThan extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new BooleanVariable(v1 > v2);
+		}
+	}
+
+	public static class IntLessThan extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new BooleanVariable(v1 < v2);
+		}
+	}
+
+	public static class IntEquals extends BinaryOperator<Integer> {
+		protected Word operate(Integer v1, Integer v2) {
+			return new BooleanVariable(v1 == v2);
 		}
 	}
 }
