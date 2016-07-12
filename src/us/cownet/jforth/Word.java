@@ -1,4 +1,4 @@
-import ExecutionContext;
+package us.cownet.jforth;
 
 public class Word {
 	public String getName() {

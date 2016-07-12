@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
+package us.cownet.jforth;
 
 /*
 
@@ -49,15 +46,7 @@ import java.util.Scanner;
 
  */
 
-public class Main {	
-
-	
-
-	
-
-	
-	
-	
+public class Main {
 	public static void main(String args[]) {
 		Terminal t = new Terminal();
 		System.out.println("Hello world.");

@@ -1,5 +1,6 @@
+package us.cownet.jforth;
+
 import java.util.HashMap;
-import Vocabulary;
 
 public class VocabularyExtension implements Vocabulary {
 	private Vocabulary parent;

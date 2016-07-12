@@ -1,10 +1,8 @@
-import CompositeWord;
-import Vocabulary;
-import Terminal;
+package us.cownet.jforth;
 
 public class ExecutionContext extends Word {
-	private ExecutionContext parent;
 	public int index;
+	private ExecutionContext parent;
 	private CompositeWord caller;
 	private Vocabulary vocab;
 	private Terminal terminal;
@@ -29,28 +27,28 @@ public class ExecutionContext extends Word {
 		return parent;
 	}
 
-	public void setTerminal(Terminal terminal) {
-		this.terminal = terminal;
-	}
-
 	public Terminal getTerminal() {
 		return terminal;
 	}
 
-	public void setVocab(Vocabulary vocab) {
-		this.vocab = vocab;
+	public void setTerminal(Terminal terminal) {
+		this.terminal = terminal;
 	}
 
 	public Vocabulary getVocab() {
 		return vocab;
 	}
 
-	public void setCaller(CompositeWord caller) {
-		this.caller = caller;
+	public void setVocab(Vocabulary vocab) {
+		this.vocab = vocab;
 	}
 
 	public CompositeWord getCaller() {
 		return caller;
+	}
+
+	public void setCaller(CompositeWord caller) {
+		this.caller = caller;
 	}
 
 	public void branch(int offset) {

@@ -1,6 +1,7 @@
+package us.cownet.jforth;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import ExecutionContext;
 
 public class CompositeWord extends Word {
 	private String name;
