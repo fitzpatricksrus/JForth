@@ -7,5 +7,13 @@ public class Word {
 
 	public void execute(ExecutionContext context) {
 	}
+
+	public final Vocabulary getVocabulary() {
+		return constructVocabulary();
+	}
+
+	protected SimpleVocabulary constructVocabulary() {
+		return new SimpleVocabulary();
+	}
 }
 

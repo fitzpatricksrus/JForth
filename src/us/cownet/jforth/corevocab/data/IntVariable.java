@@ -4,6 +4,19 @@ import us.cownet.jforth.SimpleVocabulary;
 import us.cownet.jforth.Word;
 
 public class IntVariable extends DataWord<Integer> {
+	public static final IntConstant ZERO = new IntConstant(0);
+	public static final IntConstant ONE = new IntConstant(1);
+	
+	public static class IntConstant extends IntVariable {
+		public IntConstant(Integer value) {
+			super(value);
+		}
+		@Override
+		public void setValue(Integer newValue) {
+			throw new UnsupportedOperationException();
+		}
+	}
+	
 	public IntVariable() {
 		super(0);
 	}
@@ -28,6 +41,7 @@ public class IntVariable extends DataWord<Integer> {
 		v.addWord(new IntGreaterThan());
 		v.addWord(new IntLessThan());
 		v.addWord(new IntEquals());
+		v.addWord(new IntPlusPlus());
 		return v;
 	}
 
@@ -114,5 +128,12 @@ public class IntVariable extends DataWord<Integer> {
 			return new BooleanVariable(v1 == v2);
 		}
 	}
+
+	public static class IntPlusPlus extends UnaryOperator<Integer> {
+		protected Word operate(Integer v) {
+			return new IntVariable(v+1);
+		}
+	}
+
 }
 

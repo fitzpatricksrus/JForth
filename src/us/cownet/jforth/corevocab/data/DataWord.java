@@ -28,10 +28,6 @@ public abstract class DataWord<T> extends Word {
 		return new Setter();
 	}
 
-	public final Vocabulary getVocabulary() {
-		return constructVocabulary();
-	}
-
 	public static class IdentityEquals<T> extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
@@ -67,10 +63,6 @@ public abstract class DataWord<T> extends Word {
 		}
 
 		protected abstract Word operate(T v1, T v2);
-	}
-
-	protected SimpleVocabulary constructVocabulary() {
-		return new SimpleVocabulary();
 	}
 
 }
