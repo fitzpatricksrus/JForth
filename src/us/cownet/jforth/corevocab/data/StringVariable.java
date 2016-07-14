@@ -14,7 +14,12 @@ public class StringVariable extends DataWord<String> {
 
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
-		return super.constructVocabulary();
+		return super.constructVocabulary()
+				.addWord(new StringEquals())
+				.addWord(new StringEqualsIgnoreCase())
+				.addWord(new StringGreaterThan())
+				.addWord(new StringLessThan())
+				.addWord(new StringCompareTo());
 	}
 
 	public static class StringEquals extends BinaryOperator<String> {

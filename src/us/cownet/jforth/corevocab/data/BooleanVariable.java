@@ -25,8 +25,11 @@ public class BooleanVariable extends DataWord<Boolean> {
 	}
 
 	@Override
-	public SimpleVocabulary constructVocabulary() {
-		return super.constructVocabulary();
+	protected SimpleVocabulary constructVocabulary() {
+		return super.constructVocabulary()
+				.addWord(new BooleanNot())
+				.addWord(new BooleanEquals())
+				.addWord(new BooleanNotEquals());
 	}
 
 	public static class BooleanNot extends UnaryOperator<Boolean> {

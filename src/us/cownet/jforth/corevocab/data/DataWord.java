@@ -2,7 +2,6 @@ package us.cownet.jforth.corevocab.data;
 
 import us.cownet.jforth.ExecutionContext;
 import us.cownet.jforth.SimpleVocabulary;
-import us.cownet.jforth.Vocabulary;
 import us.cownet.jforth.Word;
 
 public abstract class DataWord<T> extends Word {
@@ -26,6 +25,11 @@ public abstract class DataWord<T> extends Word {
 
 	public Word getSetter() {
 		return new Setter();
+	}
+
+	@Override
+	protected SimpleVocabulary constructVocabulary() {
+		return super.constructVocabulary().addWord(new IdentityEquals<>());
 	}
 
 	public static class IdentityEquals<T> extends Word {

@@ -6,15 +6,24 @@ public class SimpleVocabulary implements Vocabulary {
 	private HashMap<String, Word> wordList;
 
 	public SimpleVocabulary() {
-		this.wordList = new HashMap<>();
+		wordList = new HashMap<>();
 	}
 
-	public void addWord(Word word) {
+	public SimpleVocabulary(Word words[]) {
+		wordList = new HashMap<>();
+		for (Word w : words) {
+			wordList.put(w.getName(), w);
+		}
+	}
+
+	public SimpleVocabulary addWord(Word word) {
 		addWord(word.getName(), word);
+		return this;
 	}
 
-	public void addWord(String name, Word word) {
+	public SimpleVocabulary addWord(String name, Word word) {
 		wordList.put(name, word);
+		return this;
 	}
 
 	public void removeWord(Word word) {

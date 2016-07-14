@@ -6,7 +6,7 @@ import us.cownet.jforth.Word;
 public class IntVariable extends DataWord<Integer> {
 	public static final IntConstant ZERO = new IntConstant(0);
 	public static final IntConstant ONE = new IntConstant(1);
-	
+
 	public static class IntConstant extends IntVariable {
 		public IntConstant(Integer value) {
 			super(value);
@@ -16,7 +16,7 @@ public class IntVariable extends DataWord<Integer> {
 			throw new UnsupportedOperationException();
 		}
 	}
-	
+
 	public IntVariable() {
 		super(0);
 	}
@@ -25,24 +25,24 @@ public class IntVariable extends DataWord<Integer> {
 		super(value);
 	}
 
-	public SimpleVocabulary constructVocabContents() {
-		SimpleVocabulary v = super.constructVocabulary();
-		v.addWord(new IntNegate());
-		v.addWord(new IntNot());
-		v.addWord(new IntPlus());
-		v.addWord(new IntMinus());
-		v.addWord(new IntTimes());
-		v.addWord(new IntDivide());
-		v.addWord(new IntMod());
-		v.addWord(new IntOr());
-		v.addWord(new IntAnd());
-		v.addWord(new IntXor());
-		v.addWord(new IntShift());
-		v.addWord(new IntGreaterThan());
-		v.addWord(new IntLessThan());
-		v.addWord(new IntEquals());
-		v.addWord(new IntPlusPlus());
-		return v;
+	@Override
+	public SimpleVocabulary constructVocabulary() {
+		return super.constructVocabulary()
+				.addWord(new IntNegate())
+				.addWord(new IntNot())
+				.addWord(new IntPlus())
+				.addWord(new IntMinus())
+				.addWord(new IntTimes())
+				.addWord(new IntDivide())
+				.addWord(new IntMod())
+				.addWord(new IntOr())
+				.addWord(new IntAnd())
+				.addWord(new IntXor())
+				.addWord(new IntShift())
+				.addWord(new IntGreaterThan())
+				.addWord(new IntLessThan())
+				.addWord(new IntEquals())
+				.addWord(new IntPlusPlus());
 	}
 
 	public static class IntNegate extends UnaryOperator<Integer> {

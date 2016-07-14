@@ -15,5 +15,11 @@ public class Word {
 	protected SimpleVocabulary constructVocabulary() {
 		return new SimpleVocabulary();
 	}
+
+	public static class ExecuteTOS extends Word {
+		public void execute(ExecutionContext context) {
+			context.popTemp().execute(context);
+		}
+	}
 }
 
