@@ -2,6 +2,7 @@ package us.cownet.jforth.corevocab.data;
 
 import us.cownet.jforth.ExecutionContext;
 import us.cownet.jforth.Word;
+import us.cownet.jforth.*;
 
 public class WordArray extends Word {
 	private Word values[];
@@ -19,15 +20,13 @@ public class WordArray extends Word {
 	}
 
 	@Override
-	protected Word[] constructVocabulary() {
-		Word[] v = {
-				new WordArrayCreate(),
-				new WordArrayCreateSize(),
-				new WordArraySize(),
-				new WordArrayAt(),
-				new WordArrayPut()
-		};
-		return v;
+	protected SimpleVocabulary constructVocabulary() {
+		return constructVocabulary()
+				.addWord(new WordArrayCreate())
+				.addWord(new WordArrayCreateSize())
+			.addWord(new WordArraySize())
+			.addWord(new WordArrayAt())
+			.addWord(new WordArrayPut());
 	}
 
 	public static class WordArrayCreate extends Word {
