@@ -1,14 +1,11 @@
-package us.cownet.jforth.corevocab.data;
+package us.cownet.jforth;
 
-import us.cownet.jforth.SimpleVocabulary;
-import us.cownet.jforth.Word;
-
-public class StringVariable extends DataWord<String> {
-	public StringVariable() {
+public class StringConstant extends DataWord<String> {
+	public StringConstant() {
 		super("");
 	}
 
-	public StringVariable(String value) {
+	public StringConstant(String value) {
 		super(value);
 	}
 
@@ -25,35 +22,42 @@ public class StringVariable extends DataWord<String> {
 	public static class StringEquals extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanVariable(v1.equals(v2));
+			return new BooleanConstant(v1.equals(v2));
 		}
 	}
 
 	public static class StringEqualsIgnoreCase extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanVariable(v1.equalsIgnoreCase(v2));
+			return new BooleanConstant(v1.equalsIgnoreCase(v2));
 		}
 	}
 
 	public static class StringGreaterThan extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanVariable(v1.compareTo(v2) > 0);
+			return new BooleanConstant(v1.compareTo(v2) > 0);
 		}
 	}
 
 	public static class StringLessThan extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanVariable(v1.compareTo(v2) < 0);
+			return new BooleanConstant(v1.compareTo(v2) < 0);
 		}
 	}
 
 	public static class StringCompareTo extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new IntVariable(v1.compareTo(v2));
+			return new IntegerConstant(v1.compareTo(v2));
+		}
+	}
+
+	public static class StringConcat extends BinaryOperator<String> {
+		@Override
+		protected Word operate(String v1, String v2) {
+			return new StringConstant(v1 + v2);
 		}
 	}
 }

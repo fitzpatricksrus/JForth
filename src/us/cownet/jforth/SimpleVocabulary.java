@@ -2,18 +2,11 @@ package us.cownet.jforth;
 
 import java.util.HashMap;
 
-public class SimpleVocabulary implements Vocabulary {
+public class SimpleVocabulary extends Word implements Vocabulary {
 	private HashMap<String, Word> wordList;
 
 	public SimpleVocabulary() {
 		wordList = new HashMap<>();
-	}
-
-	public SimpleVocabulary(Word words[]) {
-		wordList = new HashMap<>();
-		for (Word w : words) {
-			wordList.put(w.getName(), w);
-		}
 	}
 
 	public SimpleVocabulary addWord(Word word) {

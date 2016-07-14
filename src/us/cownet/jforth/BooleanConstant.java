@@ -1,26 +1,14 @@
-package us.cownet.jforth.corevocab.data;
+package us.cownet.jforth;
 
-import us.cownet.jforth.SimpleVocabulary;
-import us.cownet.jforth.Word;
+public class BooleanConstant extends DataWord<Boolean> {
+	public static final BooleanConstant TRUE = new BooleanConstant(true);
+	public static final BooleanConstant FALSE = new BooleanConstant(false);
 
-public class BooleanVariable extends DataWord<Boolean> {
-	public static final BooleanVariable TRUE = new BooleanVariable(true) {
-		public void setValue(Boolean newValue) {
-			throw new UnsupportedOperationException();
-		}
-	};
-
-	public static final BooleanVariable FALSE = new BooleanVariable(false) {
-		public void setValue(Boolean newValue) {
-			throw new UnsupportedOperationException();
-		}
-	};
-
-	public BooleanVariable() {
+	public BooleanConstant() {
 		super(false);
 	}
 
-	public BooleanVariable(boolean value) {
+	public BooleanConstant(boolean value) {
 		super(value);
 	}
 
@@ -35,7 +23,7 @@ public class BooleanVariable extends DataWord<Boolean> {
 	public static class BooleanNot extends UnaryOperator<Boolean> {
 		@Override
 		protected Word operate(Boolean value) {
-			return new BooleanVariable(!value);
+			return new BooleanConstant(!value);
 		}
 	}
 

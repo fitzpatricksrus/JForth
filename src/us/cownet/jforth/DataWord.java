@@ -1,8 +1,4 @@
-package us.cownet.jforth.corevocab.data;
-
-import us.cownet.jforth.ExecutionContext;
-import us.cownet.jforth.SimpleVocabulary;
-import us.cownet.jforth.Word;
+package us.cownet.jforth;
 
 public abstract class DataWord<T> extends Word {
 	private T value;
@@ -19,33 +15,8 @@ public abstract class DataWord<T> extends Word {
 		return value;
 	}
 
-	public void setValue(T newValue) {
+	protected void setValue(T newValue) {
 		value = newValue;
-	}
-
-	public Word getSetter() {
-		return new Setter();
-	}
-
-	@Override
-	protected SimpleVocabulary constructVocabulary() {
-		return super.constructVocabulary().addWord(new IdentityEquals<>());
-	}
-
-	public static class IdentityEquals<T> extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			context.pushTemp(new BooleanVariable(context.popTemp() == context.popTemp()));
-		}
-	}
-
-	public static class Setter<T> extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			DataWord<T> dest = (DataWord<T>) context.popTemp();
-			DataWord<T> value = (DataWord<T>) context.popTemp();
-			dest.value = value.value;
-		}
 	}
 
 	public static abstract class UnaryOperator<T> extends Word {
