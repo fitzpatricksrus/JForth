@@ -84,4 +84,31 @@ public class ExecutionContext extends Word {
 	public Word topTemp() {
 		return temps.get(temps.size() - 1);
 	}
+
+	public void pushTemp(boolean b) {
+		pushTemp(b ? BooleanConstant.TRUE : BooleanConstant.FALSE);
+	}
+
+	public boolean popBoolean() {
+		BooleanConstant b = (BooleanConstant) popTemp();
+		return b.getValue();
+	}
+
+	public void pushTemp(int i) {
+		pushTemp((i == 0) ? IntegerConstant.ZERO : (i == 1) ? IntegerConstant.ONE : new IntegerConstant(i));
+	}
+
+	public int popInt() {
+		IntegerConstant i = (IntegerConstant) popTemp();
+		return i.getValue();
+	}
+
+	public void pushTemp(String s) {
+		pushTemp(new StringConstant(s));
+	}
+
+	public String popString() {
+		StringConstant s = (StringConstant) popTemp();
+		return s.getValue();
+	}
 }

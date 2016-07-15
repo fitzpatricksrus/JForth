@@ -15,6 +15,18 @@ public class WordArray extends Word {
 		context.pushTemp(this);
 	}
 
+	public Word at(int ndx) {
+		return values[ndx];
+	}
+
+	public void put(int ndx, Word value) {
+		values[ndx] = value;
+	}
+
+	public int size() {
+		return values.length;
+	}
+
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
 		return constructVocabulary()
@@ -64,6 +76,18 @@ public class WordArray extends Word {
 		public void execute(ExecutionContext context) {
 			WordArray array = (WordArray)context.popTemp();
 			context.pushTemp(new IntegerConstant(array.values.length));
+		}
+	}
+
+	public static class WordArrayFillFromStack extends Word {
+		// ( ...word, word, word,...,array -- )
+		@Override
+		public void execute(ExecutionContext context) {
+			WordArray a = (WordArray) context.popTemp();
+			int count = a.values.length;
+			for (int i = 0; i < count; i++) {
+				a.values[i] = context.popTemp();
+			}
 		}
 	}
 
