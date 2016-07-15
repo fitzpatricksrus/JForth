@@ -12,6 +12,9 @@ public class BooleanConstant extends DataWord<Boolean> {
 		super(value);
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
 		return super.constructVocabulary()

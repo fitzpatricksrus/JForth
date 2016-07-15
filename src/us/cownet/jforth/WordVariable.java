@@ -9,6 +9,9 @@ public class WordVariable extends Word {
 		this.value = value;
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
 		return constructVocabulary()
@@ -18,6 +21,7 @@ public class WordVariable extends Word {
 	}
 
 	public static class WordVariableCreate extends Word {
+		// ( -- variable )
 		@Override
 		public void execute(ExecutionContext context) {
 			context.push(new WordVariable(NULL));
@@ -25,21 +29,20 @@ public class WordVariable extends Word {
 	}
 
 	public static class WordVariableAt extends Word {
+		// ( variable -- word )
 		@Override
 		public void execute(ExecutionContext context) {
-			WordVariable array = (WordVariable) context.pop();
-			IntegerConstant ndx = (IntegerConstant) context.pop();
-			context.push(array.value);
+			WordVariable variable = (WordVariable) context.pop();
+			context.push(variable.value);
 		}
 	}
 
 	public static class WordVariablePut extends Word {
+		// ( word variable -- )
 		@Override
 		public void execute(ExecutionContext context) {
-			WordVariable array = (WordVariable) context.pop();
-			IntegerConstant ndx = (IntegerConstant) context.pop();
-			Word newValue = context.pop();
-			array.value = newValue;
+			WordVariable variable = (WordVariable) context.pop();
+			variable.value = context.pop();
 		}
 	}
 }

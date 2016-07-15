@@ -17,6 +17,9 @@ public class Word {
 		return new SimpleVocabulary().addWord(new IdentityEquals<>());
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	public static class IdentityEquals<T> extends Word {
 		@Override
 		public void execute(ExecutionContext context) {

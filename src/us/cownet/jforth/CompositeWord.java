@@ -35,6 +35,9 @@ public class CompositeWord extends WordArray {
 		};
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
 		return super.constructVocabulary()

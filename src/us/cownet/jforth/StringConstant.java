@@ -9,6 +9,9 @@ public class StringConstant extends DataWord<String> {
 		super(value);
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
 		return super.constructVocabulary()
@@ -16,7 +19,8 @@ public class StringConstant extends DataWord<String> {
 				.addWord(new StringEqualsIgnoreCase())
 				.addWord(new StringGreaterThan())
 				.addWord(new StringLessThan())
-				.addWord(new StringCompareTo());
+				.addWord(new StringCompareTo())
+				.addWord(new StringConcat());
 	}
 
 	public static class StringEquals extends BinaryOperator<String> {
@@ -58,6 +62,18 @@ public class StringConstant extends DataWord<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
 			return new StringConstant(v1 + v2);
+		}
+	}
+
+	public static class StringSubString extends Word {
+		// ( string startInclusive endExclusive -- string )
+		@Override
+		public void execute(ExecutionContext context) {
+			int end = context.popInt();
+			int start = context.popInt();
+			String s = context.popString();
+			String subString = s.substring(start, end);
+			context.push(subString);
 		}
 	}
 }

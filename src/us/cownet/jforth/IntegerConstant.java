@@ -12,6 +12,9 @@ public class IntegerConstant extends DataWord<Integer> {
 		super(value);
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	@Override
 	public SimpleVocabulary constructVocabulary() {
 		return super.constructVocabulary()

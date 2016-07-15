@@ -106,6 +106,9 @@ public class ExecutionContext extends Word {
 		push(new StringConstant(s));
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
 		return super.constructVocabulary()
