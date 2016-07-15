@@ -4,16 +4,6 @@ public class IntegerConstant extends DataWord<Integer> {
 	public static final IntConstant ZERO = new IntConstant(0);
 	public static final IntConstant ONE = new IntConstant(1);
 
-	public static class IntConstant extends IntegerConstant {
-		public IntConstant(Integer value) {
-			super(value);
-		}
-		@Override
-		public void setValue(Integer newValue) {
-			throw new UnsupportedOperationException();
-		}
-	}
-
 	public IntegerConstant() {
 		super(0);
 	}
@@ -40,6 +30,17 @@ public class IntegerConstant extends DataWord<Integer> {
 				.addWord(new IntLessThan())
 				.addWord(new IntEquals())
 				.addWord(new IntPlusPlus());
+	}
+
+	public static class IntConstant extends IntegerConstant {
+		public IntConstant(Integer value) {
+			super(value);
+		}
+
+		@Override
+		public void setValue(Integer newValue) {
+			throw new UnsupportedOperationException();
+		}
 	}
 
 	public static class IntNegate extends UnaryOperator<Integer> {
@@ -110,19 +111,19 @@ public class IntegerConstant extends DataWord<Integer> {
 
 	public static class IntGreaterThan extends BinaryOperator<Integer> {
 		protected Word operate(Integer v1, Integer v2) {
-			return new BooleanConstant(v1 > v2);
+			return (v1 > v2) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
 		}
 	}
 
 	public static class IntLessThan extends BinaryOperator<Integer> {
 		protected Word operate(Integer v1, Integer v2) {
-			return new BooleanConstant(v1 < v2);
+			return (v1 < v2) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
 		}
 	}
 
 	public static class IntEquals extends BinaryOperator<Integer> {
 		protected Word operate(Integer v1, Integer v2) {
-			return new BooleanConstant(v1 == v2);
+			return (v1.equals(v2)) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
 		}
 	}
 

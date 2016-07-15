@@ -23,7 +23,7 @@ public class BooleanConstant extends DataWord<Boolean> {
 	public static class BooleanNot extends UnaryOperator<Boolean> {
 		@Override
 		protected Word operate(Boolean value) {
-			return new BooleanConstant(!value);
+			return (!value) ? TRUE : FALSE;
 		}
 	}
 

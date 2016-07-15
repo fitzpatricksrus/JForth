@@ -22,28 +22,28 @@ public class StringConstant extends DataWord<String> {
 	public static class StringEquals extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanConstant(v1.equals(v2));
+			return (v1.equals(v2)) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
 		}
 	}
 
 	public static class StringEqualsIgnoreCase extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanConstant(v1.equalsIgnoreCase(v2));
+			return (v1.equalsIgnoreCase(v2)) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
 		}
 	}
 
 	public static class StringGreaterThan extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanConstant(v1.compareTo(v2) > 0);
+			return (v1.compareTo(v2) > 0) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
 		}
 	}
 
 	public static class StringLessThan extends BinaryOperator<String> {
 		@Override
 		protected Word operate(String v1, String v2) {
-			return new BooleanConstant(v1.compareTo(v2) < 0);
+			return (v1.compareTo(v2) < 0) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
 		}
 	}
 
