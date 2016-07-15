@@ -6,7 +6,7 @@ public class Word {
 	}
 
 	public void execute(ExecutionContext context) {
-		context.pushTemp(this);
+		context.push(this);
 	}
 
 	public final Vocabulary getVocabulary() {
@@ -20,13 +20,7 @@ public class Word {
 	public static class IdentityEquals<T> extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			context.pushTemp(new BooleanConstant(context.popTemp() == context.popTemp()));
-		}
-	}
-
-	public static class ExecuteTOS extends Word {
-		public void execute(ExecutionContext context) {
-			context.popTemp().execute(context);
+			context.push(new BooleanConstant(context.pop() == context.pop()));
 		}
 	}
 }

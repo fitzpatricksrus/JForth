@@ -7,10 +7,6 @@ public abstract class DataWord<T> extends Word {
 		this.value = value;
 	}
 
-	public void execute(ExecutionContext context) {
-		context.pushTemp(this);
-	}
-
 	public T getValue() {
 		return value;
 	}
@@ -22,8 +18,8 @@ public abstract class DataWord<T> extends Word {
 	public static abstract class UnaryOperator<T> extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			DataWord<T> v = (DataWord<T>) context.popTemp();
-			context.pushTemp(operate(v.value));
+			DataWord<T> v = (DataWord<T>) context.pop();
+			context.push(operate(v.value));
 		}
 
 		protected abstract Word operate(T value);
@@ -32,9 +28,9 @@ public abstract class DataWord<T> extends Word {
 	public static abstract class BinaryOperator<T> extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			DataWord<T> v1 = (DataWord<T>) context.popTemp();
-			DataWord<T> v2 = (DataWord<T>) context.popTemp();
-			context.pushTemp(operate(v1.value, v2.value));
+			DataWord<T> v1 = (DataWord<T>) context.pop();
+			DataWord<T> v2 = (DataWord<T>) context.pop();
+			context.push(operate(v1.value, v2.value));
 		}
 
 		protected abstract Word operate(T v1, T v2);

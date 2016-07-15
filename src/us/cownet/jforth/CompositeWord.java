@@ -1,35 +1,53 @@
 package us.cownet.jforth;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-public class CompositeWord extends Word {
+public class CompositeWord extends WordArray {
 	private String name;
-	private ArrayList<Word> words = new ArrayList<>();
 
 	public CompositeWord(String name) {
 		this.name = name;
 	}
 
 	public CompositeWord(String name, Word[] words) {
+		super(words);
 		this.name = name;
-		this.words.addAll(Arrays.asList(words));
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
-	public void execute(ExecutionContext context) {
-		ExecutionContext newContext = new ExecutionContext(context, this);
-		for (newContext.index = 0; newContext.index < words.size(); newContext.index++) {
-			Word w = words.get(newContext.index);
-			w.execute(newContext);
-		}
+	public Word getExecutor() {
+		return new Word() {
+			@Override
+			public String getName() {
+				return CompositeWord.this.getName() + ".execute";
+			}
+
+			@Override
+			public void execute(ExecutionContext context) {
+				ExecutionContext newContext = new ExecutionContext(context, CompositeWord.this);
+				for (newContext.index = 0; newContext.index < CompositeWord.this.size(); newContext.index++) {
+					Word w = CompositeWord.this.at(newContext.index);
+					w.execute(newContext);
+				}
+			}
+		};
 	}
 
-	public void appendWord(Word word) {
-		words.add(word);
+	@Override
+	protected SimpleVocabulary constructVocabulary() {
+		return super.constructVocabulary()
+				.addWord(new CompositeWordExecutable());
+	}
+
+	// this returns a Word that when executed will execute the contents of this CompositeWord
+	public static class CompositeWordExecutable extends Word {
+		// ( CompositeWord -- CompositeWordExecutor )
+		@Override
+		public void execute(ExecutionContext context) {
+			CompositeWord cw = (CompositeWord) context.pop();
+			context.push(cw.getExecutor());
+		}
 	}
 }

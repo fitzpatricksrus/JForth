@@ -60,55 +60,103 @@ public class ExecutionContext extends Word {
 		index = index + offset;
 	}
 
-	public Word popTemp() {
+	public Word top() {
+		return temps.get(temps.size() - 1);
+	}
+
+	public Word peek(int ndx) {
+		return temps.get(ndx);
+	}
+
+	public Word pop() {
 		int ndx = temps.size() - 1;
 		Word result = temps.get(ndx);
 		temps.remove(ndx);
 		return result;
 	}
 
-	public int pushTemp(Word value) {
-		int ndx = temps.size();
+	public void push(Word value) {
 		temps.add(value);
-		return ndx;
-	}
-
-	public Word getTemp(int ndx) {
-		return temps.get(ndx);
-	}
-
-	public void setTemp(int ndx, Word value) {
-		temps.set(ndx, value);
-	}
-
-	public Word topTemp() {
-		return temps.get(temps.size() - 1);
-	}
-
-	public void pushTemp(boolean b) {
-		pushTemp(b ? BooleanConstant.TRUE : BooleanConstant.FALSE);
 	}
 
 	public boolean popBoolean() {
-		BooleanConstant b = (BooleanConstant) popTemp();
+		BooleanConstant b = (BooleanConstant) pop();
 		return b.getValue();
 	}
 
-	public void pushTemp(int i) {
-		pushTemp((i == 0) ? IntegerConstant.ZERO : (i == 1) ? IntegerConstant.ONE : new IntegerConstant(i));
+	public void push(boolean b) {
+		push(b ? BooleanConstant.TRUE : BooleanConstant.FALSE);
 	}
 
 	public int popInt() {
-		IntegerConstant i = (IntegerConstant) popTemp();
+		IntegerConstant i = (IntegerConstant) pop();
 		return i.getValue();
 	}
 
-	public void pushTemp(String s) {
-		pushTemp(new StringConstant(s));
+	public void push(int i) {
+		push((i == 0) ? IntegerConstant.ZERO : (i == 1) ? IntegerConstant.ONE : new IntegerConstant(i));
 	}
 
 	public String popString() {
-		StringConstant s = (StringConstant) popTemp();
+		StringConstant s = (StringConstant) pop();
 		return s.getValue();
 	}
+
+	public void push(String s) {
+		push(new StringConstant(s));
+	}
+
+	@Override
+	protected SimpleVocabulary constructVocabulary() {
+		return super.constructVocabulary()
+				.addWord(new ExecutionContextDup())
+				.addWord(new ExecutionContextPeek())
+				.addWord(new ExecutionContextDrop())
+				.addWord(new ExecutionContextSelect())
+				.addWord(new ExecutionContextExecuteTOS());
+	}
+
+	public static class ExecutionContextDup extends Word {
+		// ( Word -- Word Word)
+		@Override
+		public void execute(ExecutionContext context) {
+			context.push(context.peek(0));
+		}
+	}
+
+	public static class ExecutionContextPeek extends Word {
+		// ( IntegerConstant -- Word )
+		@Override
+		public void execute(ExecutionContext context) {
+			context.push(context.peek(context.popInt()));
+		}
+	}
+
+	public static class ExecutionContextDrop extends Word {
+		// ( Wn,...W0, IntegerConstant -- Wn-1,...W0, Wn )
+		@Override
+		public void execute(ExecutionContext context) {
+			context.pop();
+		}
+	}
+
+	public static class ExecutionContextSelect extends Word {
+		// ( ..., Wx, Wn,..., W0, IntegerConstant -- ..., Wx, Wn-1,..., W0, Wn )
+		@Override
+		public void execute(ExecutionContext context) {
+			int ndx = context.popInt();
+			Word selectedWord = context.temps.get(ndx);
+			context.temps.remove(ndx);
+			context.temps.add(selectedWord);
+		}
+	}
+
+	public static class ExecutionContextExecuteTOS extends Word {
+		// ( Word -- <data pushed by Word> )
+		@Override
+		public void execute(ExecutionContext context) {
+			context.pop().execute(context);
+		}
+	}
+
 }

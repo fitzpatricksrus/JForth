@@ -11,8 +11,13 @@ public class WordArray extends Word {
 		values = new Word[size];
 	}
 
+	public WordArray(Word words[]) {
+		values = words;
+	}
+
+	@Override
 	public void execute(ExecutionContext context) {
-		context.pushTemp(this);
+		context.push(this);
 	}
 
 	public Word at(int ndx) {
@@ -29,7 +34,7 @@ public class WordArray extends Word {
 
 	@Override
 	protected SimpleVocabulary constructVocabulary() {
-		return constructVocabulary()
+		return super.constructVocabulary()
 				.addWord(new WordArrayCreate())
 				.addWord(new WordArrayCreateSize())
 				.addWord(new WordArraySize())
@@ -40,33 +45,33 @@ public class WordArray extends Word {
 	public static class WordArrayCreate extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			context.pushTemp(new WordArray());
+			context.push(new WordArray());
 		}
 	}
 
 	public static class WordArrayCreateSize extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			IntegerConstant size = (IntegerConstant) context.popTemp();
-			context.pushTemp(new WordArray(size.getValue()));
+			IntegerConstant size = (IntegerConstant) context.pop();
+			context.push(new WordArray(size.getValue()));
 		}
 	}
 
 	public static class WordArrayAt extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			WordArray array = (WordArray)context.popTemp();
-			IntegerConstant ndx = (IntegerConstant) context.popTemp();
-			context.pushTemp(array.values[ndx.getValue()]);
+			WordArray array = (WordArray) context.pop();
+			IntegerConstant ndx = (IntegerConstant) context.pop();
+			context.push(array.values[ndx.getValue()]);
 		}
 	}
 
 	public static class WordArrayPut extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			WordArray array = (WordArray)context.popTemp();
-			IntegerConstant ndx = (IntegerConstant) context.popTemp();
-			Word newValue = context.popTemp();
+			WordArray array = (WordArray) context.pop();
+			IntegerConstant ndx = (IntegerConstant) context.pop();
+			Word newValue = context.pop();
 			array.values[ndx.getValue()] = newValue;
 		}
 	}
@@ -74,8 +79,8 @@ public class WordArray extends Word {
 	public static class WordArraySize extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			WordArray array = (WordArray)context.popTemp();
-			context.pushTemp(new IntegerConstant(array.values.length));
+			WordArray array = (WordArray) context.pop();
+			context.push(new IntegerConstant(array.values.length));
 		}
 	}
 
@@ -83,10 +88,10 @@ public class WordArray extends Word {
 		// ( ...word, word, word,...,array -- )
 		@Override
 		public void execute(ExecutionContext context) {
-			WordArray a = (WordArray) context.popTemp();
+			WordArray a = (WordArray) context.pop();
 			int count = a.values.length;
 			for (int i = 0; i < count; i++) {
-				a.values[i] = context.popTemp();
+				a.values[i] = context.pop();
 			}
 		}
 	}

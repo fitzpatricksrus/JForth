@@ -20,25 +20,25 @@ public class WordVariable extends Word {
 	public static class WordVariableCreate extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			context.pushTemp(new WordVariable(NULL));
+			context.push(new WordVariable(NULL));
 		}
 	}
 
 	public static class WordVariableAt extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			WordVariable array = (WordVariable) context.popTemp();
-			IntegerConstant ndx = (IntegerConstant) context.popTemp();
-			context.pushTemp(array.value);
+			WordVariable array = (WordVariable) context.pop();
+			IntegerConstant ndx = (IntegerConstant) context.pop();
+			context.push(array.value);
 		}
 	}
 
 	public static class WordVariablePut extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
-			WordVariable array = (WordVariable) context.popTemp();
-			IntegerConstant ndx = (IntegerConstant) context.popTemp();
-			Word newValue = context.popTemp();
+			WordVariable array = (WordVariable) context.pop();
+			IntegerConstant ndx = (IntegerConstant) context.pop();
+			Word newValue = context.pop();
 			array.value = newValue;
 		}
 	}
