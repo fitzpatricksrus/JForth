@@ -26,6 +26,7 @@ public class BooleanConstant extends DataWord<Boolean> {
 	public static class BooleanNot extends UnaryOperator<Boolean> {
 		@Override
 		protected Word operate(Boolean value) {
+			// ( BooleanConstant - BooleanConstant )
 			return (!value) ? TRUE : FALSE;
 		}
 	}
@@ -33,6 +34,7 @@ public class BooleanConstant extends DataWord<Boolean> {
 	public static class BooleanEquals extends BinaryOperator<Boolean> {
 		@Override
 		protected Word operate(Boolean v1, Boolean v2) {
+			// ( BooleanConstant, BooleanConstant - BooleanConstant )
 			return (v1 == v2) ? TRUE : FALSE;
 		}
 	}
@@ -40,6 +42,7 @@ public class BooleanConstant extends DataWord<Boolean> {
 	public static class BooleanNotEquals extends BinaryOperator<Boolean> {
 		@Override
 		protected Word operate(Boolean v1, Boolean v2) {
+			// ( BooleanConstant, BooleanConstant - BooleanConstant )
 			return (v1 == v2) ? TRUE : FALSE;
 		}
 	}
