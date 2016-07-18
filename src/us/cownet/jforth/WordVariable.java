@@ -3,8 +3,6 @@ package us.cownet.jforth;
 public class WordVariable extends Word {
 	private Word value;
 
-	public static final WordVariable NULL = new WordVariable(null);
-
 	public WordVariable(Word value) {
 		this.value = value;
 	}
@@ -12,20 +10,20 @@ public class WordVariable extends Word {
 	//--------------------------
 	// Vocabulary
 
-	@Override
-	protected SimpleVocabulary constructVocabulary() {
-		return constructVocabulary()
-				.addWord(new WordVariable.WordVariableCreate())
-				.addWord(new WordVariable.WordVariableAt())
-				.addWord(new WordVariable.WordVariablePut());
-	}
-
 	public static class WordVariableCreate extends Word {
 		// ( -- variable )
 		@Override
 		public void execute(ExecutionContext context) {
 			context.push(new WordVariable(NULL));
 		}
+	}
+
+	@Override
+	protected Vocabulary constructVocabulary() {
+		return constructVocabulary()
+				.addWord(new WordVariable.WordVariableCreate())
+				.addWord(new WordVariable.WordVariableAt())
+				.addWord(new WordVariable.WordVariablePut());
 	}
 
 	public static class WordVariableAt extends Word {
@@ -45,4 +43,6 @@ public class WordVariable extends Word {
 			variable.value = context.pop();
 		}
 	}
+
+
 }

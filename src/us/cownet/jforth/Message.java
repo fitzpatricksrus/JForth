@@ -28,16 +28,6 @@ public class Message extends Word {
 		};
 	}
 
-	@Override
-	public String getName() {
-		return "message_" + message;
-	}
-
-	@Override
-	public void execute(ExecutionContext context) {
-		context.push(this);
-	}
-
 	public static class MessageCreate extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
@@ -47,8 +37,10 @@ public class Message extends Word {
 		}
 	}
 
-	//--------------------------
-	// Vocabulary
+	@Override
+	public String getName() {
+		return "message_" + message;
+	}
 
 	public static class MessageLookup extends Word {
 		@Override
@@ -61,10 +53,8 @@ public class Message extends Word {
 	}
 
 	@Override
-	protected SimpleVocabulary constructVocabulary() {
-		return super.constructVocabulary()
-		            .addWord(new MessageCreate())
-		            .addWord(new MessageExecutable());
+	public void execute(ExecutionContext context) {
+		context.push(this);
 	}
 
 	public static class MessageExecutable extends Word {
@@ -74,6 +64,18 @@ public class Message extends Word {
 			Message m = (Message) context.pop();
 			context.push(m.getExecutor());
 		}
+	}
+
+	//--------------------------
+	// Vocabulary
+
+
+
+	@Override
+	protected Vocabulary constructVocabulary() {
+		return super.constructVocabulary()
+		            .addWord(new MessageCreate())
+		            .addWord(new MessageExecutable());
 	}
 
 

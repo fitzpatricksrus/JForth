@@ -14,43 +14,23 @@ public class CompositeWord extends WordArray {
 
 	@Override
 	public String getName() {
-		return name;
+		return CompositeWord.this.getName() + ".execute()";
 	}
 
-	public Word getExecutor() {
-		return new Word() {
-			@Override
-			public String getName() {
-				return CompositeWord.this.getName() + ".execute";
-			}
-
-			@Override
-			public void execute(ExecutionContext context) {
-				ExecutionContext newContext = new ExecutionContext(context, CompositeWord.this);
-				for (newContext.index = 0; newContext.index < CompositeWord.this.size(); newContext.index++) {
-					Word w = CompositeWord.this.at(newContext.index);
-					w.execute(newContext);
-				}
-			}
-		};
+	@Override
+	public void execute(ExecutionContext context) {
+		ExecutionContext newContext = new ExecutionContext(context, CompositeWord.this);
+		for (newContext.index = 0; newContext.index < CompositeWord.this.size(); newContext.index++) {
+			Word w = CompositeWord.this.at(newContext.index);
+			w.execute(newContext);
+		}
 	}
 
 	//--------------------------
 	// Vocabulary
 
 	@Override
-	protected SimpleVocabulary constructVocabulary() {
-		return super.constructVocabulary()
-				.addWord(new CompositeWordExecutable());
-	}
-
-	// this returns a Word that when executed will execute the contents of this CompositeWord
-	public static class CompositeWordExecutable extends Word {
-		// ( CompositeWord -- CompositeWordExecutor )
-		@Override
-		public void execute(ExecutionContext context) {
-			CompositeWord cw = (CompositeWord) context.pop();
-			context.push(cw.getExecutor());
-		}
+	protected Vocabulary constructVocabulary() {
+		return super.constructVocabulary();
 	}
 }

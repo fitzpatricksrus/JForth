@@ -76,7 +76,11 @@ public class ExecutionContext extends Word {
 	}
 
 	public void push(Word value) {
-		temps.add(value);
+		if (value == null) {
+			temps.add(Word.NULL);
+		} else {
+			temps.add(value);
+		}
 	}
 
 	public boolean popBoolean() {
@@ -110,13 +114,14 @@ public class ExecutionContext extends Word {
 	// Vocabulary
 
 	@Override
-	protected SimpleVocabulary constructVocabulary() {
+	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
-				.addWord(new ExecutionContextDup())
-				.addWord(new ExecutionContextPeek())
-				.addWord(new ExecutionContextDrop())
-				.addWord(new ExecutionContextSelect())
-				.addWord(new ExecutionContextExecuteTOS());
+		            .addWord(new ExecutionContextDup())
+		            .addWord(new ExecutionContextPeek())
+		            .addWord(new ExecutionContextDrop())
+		            .addWord(new ExecutionContextSelect())
+		            .addWord(new ExecutionContextExecuteTOS())
+		            .addWord(new ExecutionContextThis());
 	}
 
 	public static class ExecutionContextDup extends Word {
@@ -154,6 +159,14 @@ public class ExecutionContext extends Word {
 		}
 	}
 
+	public static class ExecutionContextThis extends Word {
+		// ( Word -- <data pushed by Word> )
+		@Override
+		public void execute(ExecutionContext context) {
+			context.push(context.caller);
+		}
+	}
+
 	public static class ExecutionContextExecuteTOS extends Word {
 		// ( Word -- <data pushed by Word> )
 		@Override
@@ -162,4 +175,11 @@ public class ExecutionContext extends Word {
 		}
 	}
 
+	public static class ExecutionContextThis extends Word {
+		// ( Word -- <data pushed by Word> )
+		@Override
+		public void execute(ExecutionContext context) {
+			context.push(context.caller);
+		}
+	}
 }

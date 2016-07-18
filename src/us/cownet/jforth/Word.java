@@ -1,6 +1,12 @@
 package us.cownet.jforth;
 
 public class Word {
+	public static final Word NULL = new Word() {
+		public String getName() {
+			return "NULL";
+		}
+	};
+
 	public String getName() {
 		return getClass().getName();
 	}
@@ -13,17 +19,19 @@ public class Word {
 		return getVocabulary().searchWord(key);
 	}
 
+	//--------------------------
+	// Vocabulary
+
 	public final Vocabulary getVocabulary() {
 		return constructVocabulary();
 	}
 
-	protected SimpleVocabulary constructVocabulary() {
-		return new SimpleVocabulary().addWord(new IdentityEquals())
-		                             .addWord(new WordName());
+	protected Vocabulary constructVocabulary() {
+		return new Vocabulary()
+				.addWord(new IdentityEquals())
+				.addWord(new WordName())
+				.addWord(new WordNull());
 	}
-
-	//--------------------------
-	// Vocabulary
 
 	public static class IdentityEquals extends Word {
 		@Override
@@ -38,6 +46,14 @@ public class Word {
 		public void execute(ExecutionContext context) {
 			// ( Word -- StringConstant )
 			context.push(new StringConstant(context.pop().getName()));
+		}
+	}
+
+	public static class WordNull extends Word {
+		@Override
+		public void execute(ExecutionContext context) {
+			// ( Word -- StringConstant )
+			context.push(NULL);
 		}
 	}
 }

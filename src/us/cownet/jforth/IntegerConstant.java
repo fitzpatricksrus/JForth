@@ -16,7 +16,7 @@ public class IntegerConstant extends DataWord<Integer> {
 	// Vocabulary
 
 	@Override
-	public SimpleVocabulary constructVocabulary() {
+	public Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
 				.addWord(new IntNegate())
 				.addWord(new IntNot())

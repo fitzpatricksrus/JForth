@@ -17,11 +17,6 @@ public class WordArray extends Word {
 		values = words;
 	}
 
-	@Override
-	public void execute(ExecutionContext context) {
-		context.push(this);
-	}
-
 	public Word at(int ndx) {
 		return values[ndx];
 	}
@@ -37,8 +32,16 @@ public class WordArray extends Word {
 	//--------------------------
 	// Vocabulary
 
+	public static class WordArrayCreate extends Word {
+		// ( -- array )
+		@Override
+		public void execute(ExecutionContext context) {
+			context.push(new WordArray());
+		}
+	}
+
 	@Override
-	protected SimpleVocabulary constructVocabulary() {
+	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
 				.addWord(new WordArrayCreate())
 				.addWord(new WordArrayCreateSize())
@@ -48,14 +51,6 @@ public class WordArray extends Word {
 				.addWord(new WordArrayPut())
 				.addWord(new WordArrayPullFromStack())
 				.addWord(new WordArrayPushToStack());
-	}
-
-	public static class WordArrayCreate extends Word {
-		// ( -- array )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(new WordArray());
-		}
 	}
 
 	public static class WordArrayCreateSize extends Word {
@@ -133,5 +128,6 @@ public class WordArray extends Word {
 			}
 		}
 	}
+
 
 }

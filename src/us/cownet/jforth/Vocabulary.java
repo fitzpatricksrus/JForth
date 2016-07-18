@@ -1,14 +1,101 @@
 package us.cownet.jforth;
 
-public interface Vocabulary {
-	Vocabulary EMPTY = new EmptyVocabulary();
+import java.util.HashMap;
 
-	Word searchWord(String name);
+public class Vocabulary extends Word {
+	private HashMap<String, Word> wordList;
+	private HashMap<Word, String> nameList;
 
-	class EmptyVocabulary implements Vocabulary {
+	public Vocabulary() {
+		wordList = new HashMap<>();
+	}
+
+	public static void create(ExecutionContext context) {
+		context.push(new Vocabulary());
+	}
+
+	public Vocabulary addWord(Word word) {
+		addWord(word.getName(), word);
+		return this;
+	}
+
+	public Vocabulary addWord(String name, Word word) {
+		wordList.put(name, word);
+		nameList.put(word, name);
+		return this;
+	}
+
+	public void removeWord(Word word) {
+		removeWord(nameList.get(word));
+	}
+
+	public void removeWord(String name) {
+		Word word = wordList.get(name);
+		wordList.remove(name);
+		nameList.remove(word);
+	}
+
+	public String getName(Word word) {
+		return nameList.get(word);
+	}
+
+	@Override
+	public Word searchWord(String name) {
+		return wordList.get(name);
+	}
+
+	//--------------------------
+	// Vocabulary
+
+	public static class VocabularyCreate extends Word {
+		// ( -- Vocabulary )
 		@Override
-		public Word searchWord(String name) {
-			return null;
+		public void execute(ExecutionContext context) {
+			context.push(new Vocabulary());
 		}
 	}
+
+	@Override
+	protected Vocabulary constructVocabulary() {
+		return super.constructVocabulary();
+	}
+
+	public static class VocabularyAddWord extends Word {
+		// ( String Word Vocab -- )
+		@Override
+		public void execute(ExecutionContext context) {
+			Vocabulary v = (Vocabulary) context.pop();
+			Word word = context.pop();
+			String name = context.popString();
+			v.addWord(name, word);
+		}
+	}
+
+	public static class VocabularyRemoveWord extends Word {
+		// ( Word Vocab -- )
+		@Override
+		public void execute(ExecutionContext context) {
+			Vocabulary v = (Vocabulary) context.pop();
+			Word word = context.pop();
+			if (word instanceof StringConstant) {
+				StringConstant s = (StringConstant) word;
+				v.removeWord(s);
+			} else {
+				v.removeWord(word);
+			}
+		}
+	}
+
+	public static class VocabularySearchWord extends Word {
+		// ( String Vocabulary -- Word )
+		@Override
+		public void execute(ExecutionContext context) {
+			Vocabulary v = (Vocabulary) context.pop();
+			context.push(v.searchWord(context.popString()));
+		}
+	}
+
+
+
+
 }

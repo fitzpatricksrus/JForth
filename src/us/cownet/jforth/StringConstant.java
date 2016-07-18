@@ -12,8 +12,15 @@ public class StringConstant extends DataWord<String> {
 	//--------------------------
 	// Vocabulary
 
+	public static class StringEquals extends BinaryOperator<String> {
+		@Override
+		protected Word operate(String v1, String v2) {
+			return (v1.equals(v2)) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
+		}
+	}
+
 	@Override
-	protected SimpleVocabulary constructVocabulary() {
+	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
 				.addWord(new StringEquals())
 				.addWord(new StringEqualsIgnoreCase())
@@ -21,13 +28,6 @@ public class StringConstant extends DataWord<String> {
 				.addWord(new StringLessThan())
 				.addWord(new StringCompareTo())
 				.addWord(new StringConcat());
-	}
-
-	public static class StringEquals extends BinaryOperator<String> {
-		@Override
-		protected Word operate(String v1, String v2) {
-			return (v1.equals(v2)) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
-		}
 	}
 
 	public static class StringEqualsIgnoreCase extends BinaryOperator<String> {
@@ -76,4 +76,6 @@ public class StringConstant extends DataWord<String> {
 			context.push(subString);
 		}
 	}
+
+
 }
