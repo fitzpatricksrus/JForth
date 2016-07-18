@@ -21,9 +21,9 @@ public class WordVariable extends Word {
 	@Override
 	protected Vocabulary constructVocabulary() {
 		return constructVocabulary()
-				.addWord(new WordVariable.WordVariableCreate())
-				.addWord(new WordVariable.WordVariableAt())
-				.addWord(new WordVariable.WordVariablePut());
+				.addWord("new", new WordVariable.WordVariableCreate())
+				.addWord("at:", new WordVariable.WordVariableAt())
+				.addWord("at:put:", new WordVariable.WordVariablePut());
 	}
 
 	public static class WordVariableAt extends Word {

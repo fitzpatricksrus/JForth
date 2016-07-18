@@ -1,20 +1,8 @@
 package us.cownet.jforth;
 
 public class CompositeWord extends WordArray {
-	private String name;
-
-	public CompositeWord(String name) {
-		this.name = name;
-	}
-
-	public CompositeWord(String name, Word[] words) {
+	public CompositeWord(Word[] words) {
 		super(words);
-		this.name = name;
-	}
-
-	@Override
-	public String getName() {
-		return CompositeWord.this.getName() + ".execute()";
 	}
 
 	@Override

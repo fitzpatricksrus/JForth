@@ -7,10 +7,6 @@ public class Word {
 		}
 	};
 
-	public String getName() {
-		return getClass().getName();
-	}
-
 	public void execute(ExecutionContext context) {
 		context.push(this);
 	}
@@ -28,9 +24,8 @@ public class Word {
 
 	protected Vocabulary constructVocabulary() {
 		return new Vocabulary()
-				.addWord(new IdentityEquals())
-				.addWord(new WordName())
-				.addWord(new WordNull());
+				.addWord("===", new IdentityEquals())
+				.addWord("NULL", new WordNull());
 	}
 
 	public static class IdentityEquals extends Word {
@@ -38,14 +33,6 @@ public class Word {
 		public void execute(ExecutionContext context) {
 			// (word word -- BooleanConstant )
 			context.push((context.pop() == context.pop()) ? BooleanConstant.TRUE : BooleanConstant.FALSE);
-		}
-	}
-
-	public static class WordName extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			// ( Word -- StringConstant )
-			context.push(new StringConstant(context.pop().getName()));
 		}
 	}
 

@@ -18,21 +18,21 @@ public class IntegerConstant extends DataWord<Integer> {
 	@Override
 	public Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
-				.addWord(new IntNegate())
-				.addWord(new IntNot())
-				.addWord(new IntPlus())
-				.addWord(new IntMinus())
-				.addWord(new IntTimes())
-				.addWord(new IntDivide())
-				.addWord(new IntMod())
-				.addWord(new IntOr())
-				.addWord(new IntAnd())
-				.addWord(new IntXor())
-				.addWord(new IntShift())
-				.addWord(new IntGreaterThan())
-				.addWord(new IntLessThan())
-				.addWord(new IntEquals())
-				.addWord(new IntPlusPlus());
+				.addWord("negate", new IntNegate())
+				.addWord("!", new IntNot())
+				.addWord("+", new IntPlus())
+				.addWord("-", new IntMinus())
+				.addWord("*", new IntTimes())
+				.addWord("/", new IntDivide())
+				.addWord("%", new IntMod())
+				.addWord("|", new IntOr())
+				.addWord("&", new IntAnd())
+				.addWord("^", new IntXor())
+				.addWord("shift:", new IntShift())
+				.addWord(">", new IntGreaterThan())
+				.addWord("<", new IntLessThan())
+				.addWord("==", new IntEquals())
+				.addWord("++", new IntPlusPlus());
 	}
 
 	public static class IntConstant extends IntegerConstant {

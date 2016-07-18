@@ -10,15 +10,6 @@ public class Vocabulary extends Word {
 		wordList = new HashMap<>();
 	}
 
-	public static void create(ExecutionContext context) {
-		context.push(new Vocabulary());
-	}
-
-	public Vocabulary addWord(Word word) {
-		addWord(word.getName(), word);
-		return this;
-	}
-
 	public Vocabulary addWord(String name, Word word) {
 		wordList.put(name, word);
 		nameList.put(word, name);
@@ -47,17 +38,20 @@ public class Vocabulary extends Word {
 	//--------------------------
 	// Vocabulary
 
+	protected Vocabulary constructVocabulary() {
+		return super.constructVocabulary()
+				.addWord("new", new VocabularyCreate())
+				.addWord("add:", new VocabularyAddWord())
+				.addWord("remove:", new VocabularyRemoveWord())
+				.addWord("get:", new VocabularySearchWord());
+	}
+
 	public static class VocabularyCreate extends Word {
 		// ( -- Vocabulary )
 		@Override
 		public void execute(ExecutionContext context) {
 			context.push(new Vocabulary());
 		}
-	}
-
-	@Override
-	protected Vocabulary constructVocabulary() {
-		return super.constructVocabulary();
 	}
 
 	public static class VocabularyAddWord extends Word {

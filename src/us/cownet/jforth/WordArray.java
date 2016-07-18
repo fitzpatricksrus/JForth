@@ -43,14 +43,14 @@ public class WordArray extends Word {
 	@Override
 	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
-				.addWord(new WordArrayCreate())
-				.addWord(new WordArrayCreateSize())
-				.addWord(new WordArraySize())
-				.addWord(new WordArraySetSize())
-				.addWord(new WordArrayAt())
-				.addWord(new WordArrayPut())
-				.addWord(new WordArrayPullFromStack())
-				.addWord(new WordArrayPushToStack());
+				.addWord("new", new WordArrayCreate())
+				.addWord("newOfSize:", new WordArrayCreateSize())
+				.addWord("size", new WordArraySize())
+				.addWord("resize:", new WordArraySetSize())
+				.addWord("at:", new WordArrayAt())
+				.addWord("at:put:", new WordArrayPut())
+				.addWord("fillFromStack", new WordArrayPullFromStack())
+				.addWord("dumpToStack", new WordArrayPushToStack());
 	}
 
 	public static class WordArrayCreateSize extends Word {

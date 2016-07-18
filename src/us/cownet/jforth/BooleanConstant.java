@@ -14,12 +14,12 @@ public class BooleanConstant extends DataWord<Boolean> {
 	@Override
 	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
-		            .addWord(new BooleanNot())
-		            .addWord(new BooleanEquals())
-		            .addWord(new BooleanNotEquals())
-		            .addWord(new BooleanAnd())
-		            .addWord(new BooleanOr())
-		            .addWord(new BooleanXor());
+				.addWord("!", new BooleanNot())
+				.addWord("== ", new BooleanEquals())
+				.addWord("!=", new BooleanNotEquals())
+				.addWord("&&", new BooleanAnd())
+				.addWord("||", new BooleanOr())
+				.addWord("^", new BooleanXor());
 	}
 
 	public static class BooleanNot extends UnaryOperator<Boolean> {

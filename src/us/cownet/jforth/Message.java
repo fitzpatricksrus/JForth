@@ -14,10 +14,10 @@ public class Message extends Word {
 
 	protected Word getExecutor() {
 		return new Word() {
-			@Override
+/*			@Override
 			public String getName() {
 				return "." + Message.this.getName() + "()";
-			}
+			} */
 
 			@Override
 			public void execute(ExecutionContext context) {
@@ -26,20 +26,6 @@ public class Message extends Word {
 				context.top().searchWord(message).execute(context);
 			}
 		};
-	}
-
-	public static class MessageCreate extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			// ( StringConstant - Message )
-			String messageString = context.popString();
-			context.push(new Message(messageString));
-		}
-	}
-
-	@Override
-	public String getName() {
-		return "message_" + message;
 	}
 
 	public static class MessageLookup extends Word {
@@ -57,6 +43,27 @@ public class Message extends Word {
 		context.push(this);
 	}
 
+	//--------------------------
+	// Vocabulary
+
+
+
+	@Override
+	protected Vocabulary constructVocabulary() {
+		return super.constructVocabulary()
+				.addWord("message.create", new MessageCreate())
+				.addWord("message.getExecutable", new MessageExecutable());
+	}
+
+	public static class MessageCreate extends Word {
+		@Override
+		public void execute(ExecutionContext context) {
+			// ( StringConstant - Message )
+			String messageString = context.popString();
+			context.push(new Message(messageString));
+		}
+	}
+
 	public static class MessageExecutable extends Word {
 		@Override
 		public void execute(ExecutionContext context) {
@@ -66,17 +73,6 @@ public class Message extends Word {
 		}
 	}
 
-	//--------------------------
-	// Vocabulary
-
-
-
-	@Override
-	protected Vocabulary constructVocabulary() {
-		return super.constructVocabulary()
-		            .addWord(new MessageCreate())
-		            .addWord(new MessageExecutable());
-	}
 
 
 }

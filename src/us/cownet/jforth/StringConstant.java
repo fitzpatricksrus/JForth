@@ -22,12 +22,13 @@ public class StringConstant extends DataWord<String> {
 	@Override
 	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
-				.addWord(new StringEquals())
-				.addWord(new StringEqualsIgnoreCase())
-				.addWord(new StringGreaterThan())
-				.addWord(new StringLessThan())
-				.addWord(new StringCompareTo())
-				.addWord(new StringConcat());
+				.addWord("==", new StringEquals())
+				.addWord("~=", new StringEqualsIgnoreCase())
+				.addWord(">", new StringGreaterThan())
+				.addWord("<", new StringLessThan())
+				.addWord("compareTo:", new StringCompareTo())
+				.addWord("+", new StringConcat())
+				.addWord("from:to:", new StringSubString());
 	}
 
 	public static class StringEqualsIgnoreCase extends BinaryOperator<String> {

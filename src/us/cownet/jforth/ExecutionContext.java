@@ -116,12 +116,12 @@ public class ExecutionContext extends Word {
 	@Override
 	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary()
-		            .addWord(new ExecutionContextDup())
-		            .addWord(new ExecutionContextPeek())
-		            .addWord(new ExecutionContextDrop())
-		            .addWord(new ExecutionContextSelect())
-		            .addWord(new ExecutionContextExecuteTOS())
-		            .addWord(new ExecutionContextThis());
+				.addWord("dup", new ExecutionContextDup())
+				.addWord("peek", new ExecutionContextPeek())
+				.addWord("drop", new ExecutionContextDrop())
+				.addWord("select", new ExecutionContextSelect())
+				.addWord("executeTos", new ExecutionContextExecuteTOS())
+				.addWord("this", new ExecutionContextThis());
 	}
 
 	public static class ExecutionContextDup extends Word {
