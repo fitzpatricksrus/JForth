@@ -174,12 +174,4 @@ public class ExecutionContext extends Word {
 			context.pop().execute(context);
 		}
 	}
-
-	public static class ExecutionContextThis extends Word {
-		// ( Word -- <data pushed by Word> )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(context.caller);
-		}
-	}
 }
