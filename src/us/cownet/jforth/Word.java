@@ -23,25 +23,26 @@ public class Word {
 	}
 
 	protected Vocabulary constructVocabulary() {
-		return new Vocabulary()
-				.addWord("===", new IdentityEquals())
-				.addWord("NULL", new WordNull());
+		Vocabulary v = new Vocabulary();
+		Class c = getClass();
+		while (c != null) {
+			v.autoFillWords(c);
+			c = c.getSuperclass();
+		}
+		return v;
 	}
 
-	public static class IdentityEquals extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			// (word word -- BooleanConstant )
-			context.push((context.pop() == context.pop()) ? BooleanConstant.TRUE : BooleanConstant.FALSE);
-		}
+	@AlternateName(name = "===")
+	public static void IdentityEquals(ExecutionContext context) {
+		// (word word -- BooleanConstant )
+		context.push((context.pop() == context.pop()) ? BooleanConstant.TRUE : BooleanConstant.FALSE);
 	}
 
-	public static class WordNull extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			// ( Word -- StringConstant )
-			context.push(NULL);
-		}
+	@AlternateName(name = "NULL")
+	public static void WordNull(ExecutionContext context) {
+		// ( -- NULL )
+		context.push(NULL);
 	}
+
 }
 

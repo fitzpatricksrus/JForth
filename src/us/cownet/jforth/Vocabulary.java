@@ -1,5 +1,10 @@
 package us.cownet.jforth;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Vocabulary extends Word {
@@ -33,6 +38,45 @@ public class Vocabulary extends Word {
 	@Override
 	public Word searchWord(String name) {
 		return wordList.get(name);
+	}
+
+	public Vocabulary autoFillWords(Class c) {
+		Method methods[] = getMethodsBySignature(c, Void.TYPE, ExecutionContext.class);
+		for (Method m : methods) {
+			int modifiers = m.getModifiers();
+			if (Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
+				AlternateName an = m.getAnnotation(AlternateName.class);
+				String name = (an == null) ? m.getName() : an.name();
+				addWord(
+						name,
+						new Word() {
+							public void execute(ExecutionContext context) {
+								try {
+									m.invoke(null, context);
+								} catch (InvocationTargetException e) {
+									// hey jf - what do you want to do with these?
+								} catch (IllegalAccessException e) {
+									// hey jf - what do you want to do with these?
+								}
+							}
+						}
+				);
+			}
+		}
+		return this;
+	}
+
+	public static Method[] getMethodsBySignature(Class<?> clazz, Class<?> returnType, Class<?>... args) {
+		ArrayList<Method> result = new ArrayList<Method>();
+		for (Method m : clazz.getDeclaredMethods()) {
+			if (m.getReturnType().equals(returnType)) {
+				Class<?>[] params = m.getParameterTypes();
+				if (Arrays.equals(params, args)) {
+					result.add(m);
+				}
+			}
+		}
+		return result.toArray(new Method[result.size()]);
 	}
 
 	//--------------------------
