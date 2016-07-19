@@ -8,50 +8,36 @@ public class BooleanConstant extends DataWord<Boolean> {
 		super(value);
 	}
 
-	private static boolean pop(ExecutionContext context) {
-		return ((DataWord<Boolean>) context.pop()).getValue();
-	}
-
 	//--------------------------
 	// Vocabulary
 
 	@AlternateName(name = "!")
 	public static void not(ExecutionContext context) {
-		context.push((!pop(context)) ? TRUE : FALSE);
+		context.push(!context.popBoolean());
 	}
 
 	@AlternateName(name = "==")
 	public static void equals(ExecutionContext context) {
-		boolean v1 = pop(context);
-		boolean v2 = pop(context);
-		context.push((v1 == v2) ? TRUE : FALSE);
+		context.push(context.popBoolean() == context.popBoolean());
 	}
 
 	@AlternateName(name = "!=")
 	public static void notEquals(ExecutionContext context) {
-		boolean v1 = pop(context);
-		boolean v2 = pop(context);
-		context.push((v1 != v2) ? TRUE : FALSE);
+		context.push(context.popBoolean() == context.popBoolean());
 	}
 
 	@AlternateName(name = "||")
 	public static void or(ExecutionContext context) {
-		boolean v1 = pop(context);
-		boolean v2 = pop(context);
-		context.push((v1 || v2) ? TRUE : FALSE);
+		context.push(context.popBoolean() || context.popBoolean());
 	}
 
 	@AlternateName(name = "&&")
 	public static void and(ExecutionContext context) {
-		boolean v1 = pop(context);
-		boolean v2 = pop(context);
-		context.push((v1 && v2) ? TRUE : FALSE);
+		context.push(context.popBoolean() && context.popBoolean());
 	}
 
 	@AlternateName(name = "^")
 	public static void xor(ExecutionContext context) {
-		boolean v1 = pop(context);
-		boolean v2 = pop(context);
-		context.push((v1 ^ v2) ? TRUE : FALSE);
+		context.push(context.popBoolean() ^ context.popBoolean());
 	}
 }

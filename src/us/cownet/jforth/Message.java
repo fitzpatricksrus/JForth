@@ -46,33 +46,15 @@ public class Message extends Word {
 	//--------------------------
 	// Vocabulary
 
-
-
-	@Override
-	protected Vocabulary constructVocabulary() {
-		return super.constructVocabulary()
-				.addWord("message.create", new MessageCreate())
-				.addWord("message.getExecutable", new MessageExecutable());
+	public static void create(ExecutionContext context) {
+		// ( StringConstant - Message )
+		String messageString = context.popString();
+		context.push(new Message(messageString));
 	}
 
-	public static class MessageCreate extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			// ( StringConstant - Message )
-			String messageString = context.popString();
-			context.push(new Message(messageString));
-		}
+	public static void executable(ExecutionContext context) {
+		// ( Message - Word )
+		Message m = (Message) context.pop();
+		context.push(m.getExecutor());
 	}
-
-	public static class MessageExecutable extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			// ( Message - Word )
-			Message m = (Message) context.pop();
-			context.push(m.getExecutor());
-		}
-	}
-
-
-
 }

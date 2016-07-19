@@ -32,102 +32,69 @@ public class WordArray extends Word {
 	//--------------------------
 	// Vocabulary
 
-	public static class WordArrayCreate extends Word {
+	public static void create(ExecutionContext context) {
 		// ( -- array )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(new WordArray());
-		}
+		context.push(new WordArray());
 	}
 
-	@Override
-	protected Vocabulary constructVocabulary() {
-		return super.constructVocabulary()
-				.addWord("new", new WordArrayCreate())
-				.addWord("newOfSize:", new WordArrayCreateSize())
-				.addWord("size", new WordArraySize())
-				.addWord("resize:", new WordArraySetSize())
-				.addWord("at:", new WordArrayAt())
-				.addWord("at:put:", new WordArrayPut())
-				.addWord("fillFromStack", new WordArrayPullFromStack())
-				.addWord("dumpToStack", new WordArrayPushToStack());
-	}
-
-	public static class WordArrayCreateSize extends Word {
+	@AlternateName(name = "createSized:")
+	public static void createSized(ExecutionContext context) {
 		// ( size -- array )
-		@Override
-		public void execute(ExecutionContext context) {
-			IntegerConstant size = (IntegerConstant) context.pop();
-			context.push(new WordArray(size.getValue()));
-		}
+		IntegerConstant size = (IntegerConstant) context.pop();
+		context.push(new WordArray(size.getValue()));
 	}
 
-	public static class WordArrayAt extends Word {
+	@AlternateName(name = "at:")
+	public static void at(ExecutionContext context) {
 		// ( array ndx -- value )
-		@Override
-		public void execute(ExecutionContext context) {
-			IntegerConstant ndx = (IntegerConstant) context.pop();
-			WordArray array = (WordArray) context.pop();
-			context.push(array.values[ndx.getValue()]);
-		}
+		IntegerConstant ndx = (IntegerConstant) context.pop();
+		WordArray array = (WordArray) context.pop();
+		context.push(array.values[ndx.getValue()]);
 	}
 
-	public static class WordArrayPut extends Word {
+	@AlternateName(name = "put:")
+	public static void put(ExecutionContext context) {
 		// ( value array ndx -- )
-		@Override
-		public void execute(ExecutionContext context) {
-			IntegerConstant ndx = (IntegerConstant) context.pop();
-			WordArray array = (WordArray) context.pop();
-			Word newValue = context.pop();
-			array.values[ndx.getValue()] = newValue;
-		}
+		IntegerConstant ndx = (IntegerConstant) context.pop();
+		WordArray array = (WordArray) context.pop();
+		Word newValue = context.pop();
+		array.values[ndx.getValue()] = newValue;
 	}
 
-	public static class WordArraySize extends Word {
+	public static void size(ExecutionContext context) {
 		// ( array -- size )
-		@Override
-		public void execute(ExecutionContext context) {
-			WordArray array = (WordArray) context.pop();
-			context.push(new IntegerConstant(array.values.length));
-		}
+		WordArray array = (WordArray) context.pop();
+		context.push(new IntegerConstant(array.values.length));
 	}
 
-	public static class WordArraySetSize extends Word {
+	@AlternateName(name = "setSize:")
+	public static void setSize(ExecutionContext context) {
 		// ( array, size -- )
-		@Override
-		public void execute(ExecutionContext context) {
-			Word newValues[] = new Word[context.popInt()];
-			WordArray array = (WordArray) context.pop();
-			int copySize = Math.min(newValues.length, array.values.length);
-			for (int i = 0; i < copySize; i++) {
-				newValues[i] = array.values[i];
-			}
-			array.values = newValues;
+		Word newValues[] = new Word[context.popInt()];
+		WordArray array = (WordArray) context.pop();
+		int copySize = Math.min(newValues.length, array.values.length);
+		for (int i = 0; i < copySize; i++) {
+			newValues[i] = array.values[i];
 		}
+		array.values = newValues;
 	}
 
-	public static class WordArrayPullFromStack extends Word {
+	@AlternateName(name = "pullFromStack")
+	public static void WordArrayPullFromStack(ExecutionContext context) {
 		// ( ...word, word, word,...,array -- )
-		@Override
-		public void execute(ExecutionContext context) {
-			WordArray a = (WordArray) context.pop();
-			int count = a.values.length;
-			for (int i = 0; i < count; i++) {
-				a.values[i] = context.pop();
-			}
+		WordArray a = (WordArray) context.pop();
+		int count = a.values.length;
+		for (int i = 0; i < count; i++) {
+			a.values[i] = context.pop();
 		}
 	}
 
-	public static class WordArrayPushToStack extends Word {
+	@AlternateName(name = "pushToStack")
+	public static void WordArrayPushToStack(ExecutionContext context) {
 		// ( array -- word n, word, word,..,word0)
-		@Override
-		public void execute(ExecutionContext context) {
-			WordArray a = (WordArray) context.pop();
-			for (int i = a.values.length - 1; i >= 0; i--) {
-				context.push(a.values[i]);
-			}
+		WordArray a = (WordArray) context.pop();
+		for (int i = a.values.length - 1; i >= 0; i--) {
+			context.push(a.values[i]);
 		}
 	}
-
-
 }

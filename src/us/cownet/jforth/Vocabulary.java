@@ -86,58 +86,34 @@ public class Vocabulary extends Word {
 	//--------------------------
 	// Vocabulary
 
-	protected Vocabulary constructVocabulary() {
-		return super.constructVocabulary()
-				.addWord("new", new VocabularyCreate())
-				.addWord("add:", new VocabularyAddWord())
-				.addWord("remove:", new VocabularyRemoveWord())
-				.addWord("get:", new VocabularySearchWord());
-	}
-
-	public static class VocabularyCreate extends Word {
+	public static void create(ExecutionContext context) {
 		// ( -- Vocabulary )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(new Vocabulary());
-		}
+		context.push(new Vocabulary());
 	}
 
-	public static class VocabularyAddWord extends Word {
+	public static void add(ExecutionContext context) {
 		// ( String Word Vocab -- )
-		@Override
-		public void execute(ExecutionContext context) {
-			Vocabulary v = (Vocabulary) context.pop();
-			Word word = context.pop();
-			String name = context.popString();
-			v.addWord(name, word);
-		}
+		Vocabulary v = (Vocabulary) context.pop();
+		Word word = context.pop();
+		String name = context.popString();
+		v.addWord(name, word);
 	}
 
-	public static class VocabularyRemoveWord extends Word {
+	public static void remove(ExecutionContext context) {
 		// ( Word Vocab -- )
-		@Override
-		public void execute(ExecutionContext context) {
-			Vocabulary v = (Vocabulary) context.pop();
-			Word word = context.pop();
-			if (word instanceof StringConstant) {
-				StringConstant s = (StringConstant) word;
-				v.removeWord(s);
-			} else {
-				v.removeWord(word);
-			}
+		Vocabulary v = (Vocabulary) context.pop();
+		Word word = context.pop();
+		if (word instanceof StringConstant) {
+			StringConstant s = (StringConstant) word;
+			v.removeWord(s);
+		} else {
+			v.removeWord(word);
 		}
 	}
 
-	public static class VocabularySearchWord extends Word {
+	public static void at(ExecutionContext context) {
 		// ( String Vocabulary -- Word )
-		@Override
-		public void execute(ExecutionContext context) {
-			Vocabulary v = (Vocabulary) context.pop();
-			context.push(v.searchWord(context.popString()));
-		}
+		Vocabulary v = (Vocabulary) context.pop();
+		context.push(v.searchWord(context.popString()));
 	}
-
-
-
-
 }

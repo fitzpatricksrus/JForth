@@ -1,8 +1,8 @@
 package us.cownet.jforth;
 
 public class IntegerConstant extends DataWord<Integer> {
-	public static final IntConstant ZERO = new IntConstant(0);
-	public static final IntConstant ONE = new IntConstant(1);
+	public static final IntegerConstant ZERO = new IntegerConstant(0);
+	public static final IntegerConstant ONE = new IntegerConstant(0);
 
 	public IntegerConstant() {
 		super(0);
@@ -12,129 +12,96 @@ public class IntegerConstant extends DataWord<Integer> {
 		super(value);
 	}
 
+	private static int pop(ExecutionContext context) {
+		return ((IntegerConstant) context.pop()).getValue();
+	}
+
 	//--------------------------
 	// Vocabulary
 
-	@Override
-	public Vocabulary constructVocabulary() {
-		return super.constructVocabulary()
-				.addWord("negate", new IntNegate())
-				.addWord("!", new IntNot())
-				.addWord("+", new IntPlus())
-				.addWord("-", new IntMinus())
-				.addWord("*", new IntTimes())
-				.addWord("/", new IntDivide())
-				.addWord("%", new IntMod())
-				.addWord("|", new IntOr())
-				.addWord("&", new IntAnd())
-				.addWord("^", new IntXor())
-				.addWord("shift:", new IntShift())
-				.addWord(">", new IntGreaterThan())
-				.addWord("<", new IntLessThan())
-				.addWord("==", new IntEquals())
-				.addWord("++", new IntPlusPlus());
+	@AlternateName(name = "-")
+	public static void negate(ExecutionContext context) {
+		context.push(-context.popInt());
 	}
 
-	public static class IntConstant extends IntegerConstant {
-		public IntConstant(Integer value) {
-			super(value);
-		}
-
-		@Override
-		public void setValue(Integer newValue) {
-			throw new UnsupportedOperationException();
-		}
+	@AlternateName(name = "~")
+	public static void not(ExecutionContext context) {
+		context.push(~context.popInt());
 	}
 
-	public static class IntNegate extends UnaryOperator<Integer> {
-		protected Word operate(Integer value) {
-			return new IntegerConstant(-value);
-		}
+	@AlternateName(name = "+")
+	public static void plus(ExecutionContext context) {
+		context.push(context.popInt() + context.popInt());
 	}
 
-	public static class IntNot extends UnaryOperator<Integer> {
-		protected Word operate(Integer value) {
-			return new IntegerConstant(~value);
-		}
+	@AlternateName(name = "-")
+	public static void minus(ExecutionContext context) {
+		context.push(context.popInt() - context.popInt());
 	}
 
-	public static class IntPlus extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 + v2);
-		}
+	@AlternateName(name = "*")
+	public static void times(ExecutionContext context) {
+		context.push(context.popInt() * context.popInt());
 	}
 
-	public static class IntMinus extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 - v2);
-		}
+	@AlternateName(name = "/")
+	public static void divide(ExecutionContext context) {
+		context.push(context.popInt() / context.popInt());
 	}
 
-	public static class IntTimes extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 * v2);
-		}
+	@AlternateName(name = "%")
+	public static void mod(ExecutionContext context) {
+		context.push(context.popInt() % context.popInt());
 	}
 
-	public static class IntDivide extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 / v2);
-		}
+	@AlternateName(name = "|")
+	public static void or(ExecutionContext context) {
+		context.push(context.popInt() | context.popInt());
 	}
 
-	public static class IntMod extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 % v2);
-		}
+	@AlternateName(name = "&")
+	public static void and(ExecutionContext context) {
+		context.push(context.popInt() & context.popInt());
 	}
 
-	public static class IntOr extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 | v2);
-		}
+	@AlternateName(name = "^")
+	public static void xor(ExecutionContext context) {
+		context.push(context.popInt() ^ context.popInt());
 	}
 
-	public static class IntAnd extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 & v2);
-		}
+	@AlternateName(name = "<<")
+	public static void shiftLeft(ExecutionContext context) {
+		context.push(context.popInt() << context.popInt());
 	}
 
-	public static class IntXor extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 ^ v2);
-		}
+	@AlternateName(name = ">>")
+	public static void shiftRight(ExecutionContext context) {
+		context.push(context.popInt() >> context.popInt());
 	}
 
-	public static class IntShift extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return new IntegerConstant(v1 << v2);
-		}
+	@AlternateName(name = ">")
+	public static void greater(ExecutionContext context) {
+		context.push((context.popInt() > context.popInt()) ? BooleanConstant.TRUE : BooleanConstant.FALSE);
 	}
 
-	public static class IntGreaterThan extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return (v1 > v2) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
-		}
+	@AlternateName(name = "<")
+	public static void less(ExecutionContext context) {
+		context.push((context.popInt() < context.popInt()) ? BooleanConstant.TRUE : BooleanConstant.FALSE);
 	}
 
-	public static class IntLessThan extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return (v1 < v2) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
-		}
+	@AlternateName(name = "==")
+	public static void equals(ExecutionContext context) {
+		context.push((context.popInt() == context.popInt()) ? BooleanConstant.TRUE : BooleanConstant.FALSE);
 	}
 
-	public static class IntEquals extends BinaryOperator<Integer> {
-		protected Word operate(Integer v1, Integer v2) {
-			return (v1.equals(v2)) ? BooleanConstant.TRUE : BooleanConstant.FALSE;
-		}
+	@AlternateName(name = "+1")
+	public static void increment(ExecutionContext context) {
+		context.push(context.popInt() + 1);
 	}
 
-	public static class IntPlusPlus extends UnaryOperator<Integer> {
-		protected Word operate(Integer v) {
-			return new IntegerConstant(v + 1);
-		}
+	@AlternateName(name = "-1")
+	public static void decrement(ExecutionContext context) {
+		context.push(context.popInt() - 1);
 	}
-
 }
 

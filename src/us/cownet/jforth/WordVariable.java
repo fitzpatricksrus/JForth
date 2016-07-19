@@ -10,39 +10,20 @@ public class WordVariable extends Word {
 	//--------------------------
 	// Vocabulary
 
-	public static class WordVariableCreate extends Word {
+	public static void WordVariableCreate(ExecutionContext context) {
 		// ( -- variable )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(new WordVariable(NULL));
-		}
+		context.push(new WordVariable(NULL));
 	}
 
-	@Override
-	protected Vocabulary constructVocabulary() {
-		return constructVocabulary()
-				.addWord("new", new WordVariable.WordVariableCreate())
-				.addWord("at", new WordVariable.WordVariableAt())
-				.addWord("put:", new WordVariable.WordVariablePut());
-	}
-
-	public static class WordVariableAt extends Word {
+	public static void WordVariableAt(ExecutionContext context) {
 		// ( variable -- word )
-		@Override
-		public void execute(ExecutionContext context) {
-			WordVariable variable = (WordVariable) context.pop();
-			context.push(variable.value);
-		}
+		WordVariable variable = (WordVariable) context.pop();
+		context.push(variable.value);
 	}
 
-	public static class WordVariablePut extends Word {
+	public static void WordVariablePut(ExecutionContext context) {
 		// ( word variable -- )
-		@Override
-		public void execute(ExecutionContext context) {
-			WordVariable variable = (WordVariable) context.pop();
-			variable.value = context.pop();
-		}
+		WordVariable variable = (WordVariable) context.pop();
+		variable.value = context.pop();
 	}
-
-
 }
