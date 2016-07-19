@@ -47,12 +47,13 @@ public class Vocabulary extends Word {
 			if (Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers)) {
 				AlternateName an = m.getAnnotation(AlternateName.class);
 				String name = (an == null) ? m.getName() : an.name();
+				final Method method = m;
 				addWord(
 						name,
 						new Word() {
 							public void execute(ExecutionContext context) {
 								try {
-									m.invoke(null, context);
+									method.invoke(null, context);
 								} catch (InvocationTargetException e) {
 									// hey jf - what do you want to do with these?
 								} catch (IllegalAccessException e) {
