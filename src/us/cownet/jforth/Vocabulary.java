@@ -13,6 +13,7 @@ public class Vocabulary extends Word {
 
 	public Vocabulary() {
 		wordList = new HashMap<>();
+		nameList = new HashMap<>();
 	}
 
 	public Vocabulary addWord(String name, Word word) {
@@ -56,8 +57,10 @@ public class Vocabulary extends Word {
 									method.invoke(null, context);
 								} catch (InvocationTargetException e) {
 									// hey jf - what do you want to do with these?
+									System.out.println(e);
 								} catch (IllegalAccessException e) {
 									// hey jf - what do you want to do with these?
+									System.out.println(e);
 								}
 							}
 						}
