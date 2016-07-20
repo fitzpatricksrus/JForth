@@ -1,6 +1,10 @@
 package us.cownet.jforth;
 
 public class CompositeWord extends WordArray {
+	public CompositeWord() {
+		super();
+	}
+
 	public CompositeWord(Word[] words) {
 		super(words);
 	}
@@ -20,5 +24,9 @@ public class CompositeWord extends WordArray {
 	@Override
 	protected Vocabulary constructVocabulary() {
 		return super.constructVocabulary();
+	}
+
+	public static void create(ExecutionContext context) {
+		context.push(new CompositeWord());
 	}
 }

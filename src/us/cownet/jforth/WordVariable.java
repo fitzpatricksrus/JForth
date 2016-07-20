@@ -10,18 +10,20 @@ public class WordVariable extends Word {
 	//--------------------------
 	// Vocabulary
 
+	@AlternateName(name = "create")
 	public static void WordVariableCreate(ExecutionContext context) {
 		// ( -- variable )
 		context.push(new WordVariable(NULL));
 	}
 
-	public static void WordVariableAt(ExecutionContext context) {
+	public static void at(ExecutionContext context) {
 		// ( variable -- word )
 		WordVariable variable = (WordVariable) context.pop();
 		context.push(variable.value);
 	}
 
-	public static void WordVariablePut(ExecutionContext context) {
+	@AlternateName(name = "put:")
+	public static void put(ExecutionContext context) {
 		// ( word variable -- )
 		WordVariable variable = (WordVariable) context.pop();
 		variable.value = context.pop();
