@@ -3,7 +3,7 @@ package us.cownet.jforth;
 import java.util.Scanner;
 
 public class Terminal {
-	private static String operator = "([\\+-<>\\,\\.=!@#$%^\\&\\*\\(\\)\\[\\]\\{\\}]+)";
+	private static String operator = "([\\+\\-\\<\\>\\,\\.\\=\\!\\@\\#\\$%\\^\\&\\*\\(\\)\\[\\]\\{\\}]+)";
 	private static String keyword = "(\\w+\\:)";
 	Scanner inputScanner = new Scanner(System.in);
 

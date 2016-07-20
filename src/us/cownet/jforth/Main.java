@@ -49,8 +49,8 @@ package us.cownet.jforth;
 public class Main {
 	public static void main(String args[]) {
 
-		Vocabulary v = new Vocabulary();
-		v.autoFillWords(Word.class);
+//		Vocabulary v = new Vocabulary();
+//		v.autoFillWords(Word.class);
 
 		Terminal t = new Terminal();
 		System.out.println("Hello world.");
