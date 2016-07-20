@@ -113,17 +113,6 @@ public class ExecutionContext extends Word {
 	//--------------------------
 	// Vocabulary
 
-	@Override
-	protected Vocabulary constructVocabulary() {
-		return super.constructVocabulary()
-				.addWord("dup", new ExecutionContextDup())
-				.addWord("peek", new ExecutionContextPeek())
-				.addWord("drop", new ExecutionContextDrop())
-				.addWord("select", new ExecutionContextSelect())
-				.addWord("executeTos", new ExecutionContextExecuteTOS())
-				.addWord("this", new ExecutionContextThis());
-	}
-
 	public static class ExecutionContextDup extends Word {
 		// ( Word -- Word Word)
 		@Override
@@ -132,46 +121,37 @@ public class ExecutionContext extends Word {
 		}
 	}
 
-	public static class ExecutionContextPeek extends Word {
+	public static void peek(ExecutionContext context) {
 		// ( IntegerConstant -- Word )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(context.peek(context.popInt()));
-		}
+		context.push(context.peek(context.popInt()));
 	}
 
-	public static class ExecutionContextDrop extends Word {
+	public static void drop(ExecutionContext context) {
 		// ( Wn,...W0, IntegerConstant -- Wn-1,...W0, Wn )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.pop();
-		}
+		context.pop();
 	}
 
-	public static class ExecutionContextSelect extends Word {
+	public static void select(ExecutionContext context) {
 		// ( ..., Wx, Wn,..., W0, IntegerConstant -- ..., Wx, Wn-1,..., W0, Wn )
-		@Override
-		public void execute(ExecutionContext context) {
-			int ndx = context.popInt();
-			Word selectedWord = context.temps.get(ndx);
-			context.temps.remove(ndx);
-			context.temps.add(selectedWord);
-		}
+		int ndx = context.popInt();
+		Word selectedWord = context.temps.get(ndx);
+		context.temps.remove(ndx);
+		context.temps.add(selectedWord);
 	}
 
-	public static class ExecutionContextThis extends Word {
+	@AlternateName(name = "this")
+	public static void currentCaller(ExecutionContext context) {
 		// ( Word -- <data pushed by Word> )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(context.caller);
-		}
+		context.push(context.caller);
 	}
 
-	public static class ExecutionContextExecuteTOS extends Word {
+	public static void executeTOS(ExecutionContext context) {
 		// ( Word -- <data pushed by Word> )
-		@Override
-		public void execute(ExecutionContext context) {
-			context.pop().execute(context);
-		}
+		context.pop().execute(context);
+	}
+
+	public static void currentContext(ExecutionContext context) {
+		// ( Word -- <data pushed by Word> )
+		context.push(context);
 	}
 }

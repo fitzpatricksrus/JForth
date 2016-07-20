@@ -1,6 +1,8 @@
 package us.cownet.jforth;
 
 public class Word {
+	public static final String PARENT_KEY = "parent";
+
 	public static final Word NULL = new Word() {
 		public String getName() {
 			return "NULL";
@@ -12,7 +14,14 @@ public class Word {
 	}
 
 	public Word searchWord(String key) {
-		return getVocabulary().searchWord(key);
+		Word result = getVocabulary().searchWord(key);
+		if (result == null) {
+			result = getVocabulary().searchWord("PARENT_KEY");
+			if (result != null) {
+				result = result.searchWord(key);
+			}
+		}
+		return result;
 	}
 
 	//--------------------------
@@ -44,5 +53,16 @@ public class Word {
 		context.push(NULL);
 	}
 
+	public static void getParent(ExecutionContext context) {
+		// ( word -- parentWord )
+		context.push(context.pop().searchWord("PARENT_KEY"));
+	}
+
+	@AlternateName(name = "searchWord")
+	public static void searchVocabulary(ExecutionContext context) {
+		// ( StringConstant Word -- Word )
+		Word w = context.pop();
+		context.push(w.searchWord(context.popString()));
+	}
 }
 
