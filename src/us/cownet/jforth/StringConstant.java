@@ -9,6 +9,10 @@ public class StringConstant extends DataWord<String> {
 		super(value);
 	}
 
+	public String toString() {
+		return getValue();
+	}
+
 	//--------------------------
 	// Vocabulary
 

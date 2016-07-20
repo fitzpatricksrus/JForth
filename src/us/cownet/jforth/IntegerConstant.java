@@ -12,8 +12,8 @@ public class IntegerConstant extends DataWord<Integer> {
 		super(value);
 	}
 
-	private static int pop(ExecutionContext context) {
-		return ((IntegerConstant) context.pop()).getValue();
+	public String toString() {
+		return Integer.toString(getValue());
 	}
 
 	//--------------------------
@@ -102,6 +102,10 @@ public class IntegerConstant extends DataWord<Integer> {
 	@AlternateName(name = "-1")
 	public static void decrement(ExecutionContext context) {
 		context.push(context.popInt() - 1);
+	}
+
+	public static void toString(ExecutionContext context) {
+		context.push(Integer.toString(context.popInt()));
 	}
 }
 

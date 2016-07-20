@@ -8,6 +8,10 @@ public class BooleanConstant extends DataWord<Boolean> {
 		super(value);
 	}
 
+	public String toString() {
+		return Boolean.toString(getValue());
+	}
+
 	//--------------------------
 	// Vocabulary
 
