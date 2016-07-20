@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Terminal extends Word {
 	private static String operator = "([\\+\\-\\<\\>\\,\\.\\=\\!\\@\\#\\$%\\^\\&\\*\\(\\)\\[\\]\\{\\}]+)";
-	private static String keyword = "(\\w+\\:)";
+	private static String keyword = "(\\w+\\:+)";
 	Scanner inputScanner = new Scanner(System.in);
 
 	public Terminal() {
@@ -15,8 +15,10 @@ public class Terminal extends Word {
 			return new Token(TokenType.NUMBER, inputScanner.nextInt());
 		} else if (inputScanner.hasNext(operator)) {
 			return new Token(TokenType.OPERATOR, inputScanner.next(operator));
+		} else if (inputScanner.hasNext(keyword)) {
+			return new Token(TokenType.KEWORD, inputScanner.next(keyword));
 		} else {
-			return new Token(TokenType.KEWORD, inputScanner.next());
+			return new Token(TokenType.IDENTIFIER, inputScanner.next());
 		}
 	}
 
@@ -28,7 +30,8 @@ public class Terminal extends Word {
 		UNKNOWN(0),
 		NUMBER(1),
 		OPERATOR(2),
-		KEWORD(3);
+		KEWORD(3),
+		IDENTIFIER(4);
 
 		public int value;
 
