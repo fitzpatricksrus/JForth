@@ -36,8 +36,7 @@ public class Vocabulary extends Word {
 		return nameList.get(word);
 	}
 
-	@Override
-	public Word searchWord(String name) {
+	public Word localWordFor(String name) {
 		return wordList.get(name);
 	}
 
@@ -114,6 +113,6 @@ public class Vocabulary extends Word {
 	public static void at(ExecutionContext context) {
 		// ( String Vocabulary -- Word )
 		Vocabulary v = (Vocabulary) context.pop();
-		context.push(v.searchWord(context.popString()));
+		context.push(v.localWordFor(context.popString()));
 	}
 }

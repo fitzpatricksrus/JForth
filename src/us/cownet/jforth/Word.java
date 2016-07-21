@@ -13,12 +13,12 @@ public class Word {
 		context.push(this);
 	}
 
-	public Word searchWord(String key) {
-		Word result = getVocabulary().searchWord(key);
+	public Word wordFor(String key) {
+		Word result = getVocabulary().localWordFor(key);
 		if (result == null) {
-			result = getVocabulary().searchWord("PARENT_KEY");
+			result = getVocabulary().localWordFor(PARENT_KEY);
 			if (result != null) {
-				result = result.searchWord(key);
+				result = result.wordFor(key);
 			}
 		}
 		return result;
@@ -55,14 +55,20 @@ public class Word {
 
 	public static void getParent(ExecutionContext context) {
 		// ( word -- parentWord )
-		context.push(context.pop().searchWord("PARENT_KEY"));
+		context.push(context.pop().wordFor(PARENT_KEY));
 	}
 
-	@AlternateName(name = "searchWord")
+	public static void setParent(ExecutionContext context) {
+		// ( newParent word -- )
+		Word it = context.pop();
+		it.getVocabulary().addWord(PARENT_KEY, context.pop());
+	}
+
+	@AlternateName(name = "wordFor")
 	public static void searchVocabulary(ExecutionContext context) {
 		// ( StringConstant Word -- Word )
 		Word w = context.pop();
-		context.push(w.searchWord(context.popString()));
+		context.push(w.wordFor(context.popString()));
 	}
 }
 
