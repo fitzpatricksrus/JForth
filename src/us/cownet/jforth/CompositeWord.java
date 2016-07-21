@@ -21,11 +21,6 @@ public class CompositeWord extends WordArray {
 	//--------------------------
 	// Vocabulary
 
-	@Override
-	protected Vocabulary constructVocabulary() {
-		return super.constructVocabulary();
-	}
-
 	public static void create(ExecutionContext context) {
 		context.push(new CompositeWord());
 	}
