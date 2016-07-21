@@ -110,6 +110,18 @@ public class ExecutionContext extends Word {
 		push(new StringConstant(s));
 	}
 
+	public Word wordFor(String key) {
+		Word result = getVocab().wordFor(key);
+		if (result == null) {
+			if (parent == null) {
+				result = null;
+			} else {
+				result = parent.wordFor(key);
+			}
+		}
+		return result;
+	}
+
 	//--------------------------
 	// Vocabulary
 
@@ -153,5 +165,10 @@ public class ExecutionContext extends Word {
 	public static void currentContext(ExecutionContext context) {
 		// ( Word -- <data pushed by Word> )
 		context.push(context);
+	}
+
+	public static void currentVocab(ExecutionContext context) {
+		// ( Word -- <data pushed by Word> )
+		context.push(context.vocab);
 	}
 }

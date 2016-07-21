@@ -23,7 +23,15 @@ public class Message extends Word {
 			public void execute(ExecutionContext context) {
 				// ( word -- ? )
 				// hey jf - what happens if the message isn't found?
-				context.top().searchWord(message).execute(context);
+				Word word = context.top().wordFor(message);
+				if (word == null) {
+					word = context.wordFor(message);
+				}
+				if (word == null) {
+					// what do we do here if the message is not understood?
+				} else {
+					word.execute(context);
+				}
 			}
 		};
 	}
@@ -34,7 +42,7 @@ public class Message extends Word {
 			// ( StringConstant Word_a - Word_b )
 			Word thisWord = context.pop();
 			String message = context.popString();
-			context.push(thisWord.searchWord(message));
+			context.push(thisWord.wordFor(message));
 		}
 	}
 
