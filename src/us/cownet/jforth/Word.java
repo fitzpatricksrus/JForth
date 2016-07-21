@@ -16,9 +16,9 @@ public class Word {
 	public Word wordFor(String key) {
 		Word result = getVocabulary().localWordFor(key);
 		if (result == null) {
-			result = getVocabulary().localWordFor(PARENT_KEY);
-			if (result != null) {
-				result = result.wordFor(key);
+			Word parent = getVocabulary().localWordFor(PARENT_KEY);
+			if (parent != null) {
+				result = parent.wordFor(key);
 			}
 		}
 		return result;

@@ -14,11 +14,6 @@ public class Message extends Word {
 
 	protected Word getExecutor() {
 		return new Word() {
-/*			@Override
-			public String getName() {
-				return "." + Message.this.getName() + "()";
-			} */
-
 			@Override
 			public void execute(ExecutionContext context) {
 				// ( word -- ? )

@@ -111,6 +111,7 @@ public class ExecutionContext extends Word {
 	}
 
 	public Word wordFor(String key) {
+		// hey jf - this confuses the contents of the catalog with the catalog object itself.
 		Word result = getVocab().wordFor(key);
 		if (result == null) {
 			if (parent == null) {
