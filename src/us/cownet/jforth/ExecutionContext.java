@@ -126,25 +126,22 @@ public class ExecutionContext extends Word {
 	//--------------------------
 	// Vocabulary
 
-	public static class ExecutionContextDup extends Word {
-		// ( Word -- Word Word)
-		@Override
-		public void execute(ExecutionContext context) {
-			context.push(context.peek(0));
-		}
-	}
-
-	public static void peek(ExecutionContext context) {
-		// ( IntegerConstant -- Word )
-		context.push(context.peek(context.popInt()));
+	public static void dup(ExecutionContext context) {
+		// ( W -- W W)
+		context.push(context.peek(0));
 	}
 
 	public static void drop(ExecutionContext context) {
-		// ( Wn,...W0, IntegerConstant -- Wn-1,...W0, Wn )
+		// ( ...W1, W0, IntegerConstant -- ...W1 )
 		context.pop();
 	}
 
-	public static void select(ExecutionContext context) {
+	public static void peek(ExecutionContext context) {
+		// (  ..., Wn+1, Wn,..., W0, IntegerConstant -- ..., Wx, Wn,..., W0, Wn )
+		context.push(context.peek(context.popInt()));
+	}
+
+	public static void pick(ExecutionContext context) {
 		// ( ..., Wx, Wn,..., W0, IntegerConstant -- ..., Wx, Wn-1,..., W0, Wn )
 		int ndx = context.popInt();
 		Word selectedWord = context.temps.get(ndx);

@@ -43,7 +43,7 @@ public class Word {
 		context.push((context.pop() == context.pop()) ? BooleanConstant.TRUE : BooleanConstant.FALSE);
 	}
 
-	@AlternateName(name = "NULL")
+	@AlternateName(name = "null")
 	public static void WordNull(ExecutionContext context) {
 		// ( -- NULL )
 		context.push(NULL);

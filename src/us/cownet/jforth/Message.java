@@ -7,38 +7,32 @@ public class Message extends Word {
 	 */
 
 	private String message;
+	private Word executor;
 
 	public Message(String message) {
 		this.message = message;
 	}
 
 	protected Word getExecutor() {
-		return new Word() {
-			@Override
-			public void execute(ExecutionContext context) {
-				// ( word -- ? )
-				// hey jf - what happens if the message isn't found?
-				Word word = context.top().wordFor(message);
-				if (word == null) {
-					word = context.wordFor(message);
+		if (executor == null) {
+			executor = new Word() {
+				@Override
+				public void execute(ExecutionContext context) {
+					// ( word -- ? )
+					// hey jf - what happens if the message isn't found?
+					Word word = context.top().wordFor(message);
+					if (word == null) {
+						word = context.wordFor(message);
+					}
+					if (word == null) {
+						// what do we do here if the message is not understood?
+					} else {
+						word.execute(context);
+					}
 				}
-				if (word == null) {
-					// what do we do here if the message is not understood?
-				} else {
-					word.execute(context);
-				}
-			}
-		};
-	}
-
-	public static class MessageLookup extends Word {
-		@Override
-		public void execute(ExecutionContext context) {
-			// ( StringConstant Word_a - Word_b )
-			Word thisWord = context.pop();
-			String message = context.popString();
-			context.push(thisWord.wordFor(message));
+			};
 		}
+		return executor;
 	}
 
 	@Override
@@ -60,4 +54,13 @@ public class Message extends Word {
 		Message m = (Message) context.pop();
 		context.push(m.getExecutor());
 	}
+
+
+	public static void lookupMessage(ExecutionContext context) {
+		// ( StringConstant Word_a - Word_b )
+		Word thisWord = context.pop();
+		String message = context.popString();
+		context.push(thisWord.wordFor(message));
+	}
+
 }
