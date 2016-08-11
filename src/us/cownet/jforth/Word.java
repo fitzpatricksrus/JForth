@@ -4,7 +4,6 @@ public class Word {
 	public static final String PARENT_KEY = "parent";
 
 	public static final Word NULL = new Word();
-	'
 
 	public void execute(ExecutionContext context) {
 		context.push(this);
