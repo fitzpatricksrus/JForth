@@ -36,7 +36,7 @@ public class Vocabulary extends Word {
 		return nameList.get(word);
 	}
 
-	public Word localWordFor(String name) {
+	public Word containsWord(String name) {
 		return wordList.get(name);
 	}
 
@@ -113,6 +113,6 @@ public class Vocabulary extends Word {
 	public static void at(ExecutionContext context) {
 		// ( String Vocabulary -- Word )
 		Vocabulary v = (Vocabulary) context.pop();
-		context.push(v.localWordFor(context.popString()));
+		context.push(v.containsWord(context.popString()));
 	}
 }

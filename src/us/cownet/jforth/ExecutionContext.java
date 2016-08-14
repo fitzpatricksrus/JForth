@@ -4,14 +4,12 @@ import java.util.ArrayList;
 
 public class ExecutionContext extends Word {
 	public int index;
-	private ExecutionContext parent;
 	private CompositeWord caller;
 	private Vocabulary vocab;
 	private Terminal terminal;
 	private ArrayList<Word> temps;
 
 	public ExecutionContext(Vocabulary vocab, Terminal terminal) {
-		parent = null;
 		index = 0;
 		caller = null;
 		this.vocab = vocab;
@@ -20,16 +18,11 @@ public class ExecutionContext extends Word {
 	}
 
 	public ExecutionContext(ExecutionContext parent, CompositeWord caller) {
-		this.parent = parent;
 		index = 0;
 		this.caller = caller;
 		this.vocab = parent.vocab;
 		this.terminal = parent.terminal;
 		temps = new ArrayList<>();
-	}
-
-	public ExecutionContext getParent() {
-		return parent;
 	}
 
 	public Terminal getTerminal() {
@@ -108,19 +101,6 @@ public class ExecutionContext extends Word {
 
 	public void push(String s) {
 		push(new StringConstant(s));
-	}
-
-	public Word wordFor(String key) {
-		// hey jf - this confuses the contents of the catalog with the catalog object itself.
-		Word result = getVocab().wordFor(key);
-		if (result == null) {
-			if (parent == null) {
-				result = null;
-			} else {
-				result = parent.wordFor(key);
-			}
-		}
-		return result;
 	}
 
 	//--------------------------

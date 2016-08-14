@@ -9,15 +9,23 @@ public class Word {
 		context.push(this);
 	}
 
-	public Word wordFor(String key) {
-		Word result = getVocabulary().localWordFor(key);
+	public Word respondsWithWord(String key) {
+		Word result = getVocabulary().containsWord(key);
 		if (result == null) {
-			Word parent = getVocabulary().localWordFor(PARENT_KEY);
+			Word parent = getVocabulary().containsWord(PARENT_KEY);
 			if (parent != null) {
-				result = parent.wordFor(key);
+				result = parent.respondsWithWord(key);
 			}
 		}
 		return result;
+	}
+
+	public Word getParent() {
+		return getVocabulary().respondsWithWord(PARENT_KEY);
+	}
+
+	public void setParent(Word newParent) {
+		getVocabulary().addWord(PARENT_KEY, newParent);
 	}
 
 	//--------------------------
@@ -51,20 +59,20 @@ public class Word {
 
 	public static void getParent(ExecutionContext context) {
 		// ( word -- parentWord )
-		context.push(context.pop().wordFor(PARENT_KEY));
+		context.push(context.pop().getParent());
 	}
 
 	public static void setParent(ExecutionContext context) {
 		// ( newParent word -- )
 		Word it = context.pop();
-		it.getVocabulary().addWord(PARENT_KEY, context.pop());
+		it.setParent(context.pop());
 	}
 
-	@AlternateName(name = "wordFor")
+	@AlternateName(name = "respondsWithWord")
 	public static void searchVocabulary(ExecutionContext context) {
 		// ( StringConstant Word -- Word )
 		Word w = context.pop();
-		context.push(w.wordFor(context.popString()));
+		context.push(w.respondsWithWord(context.popString()));
 	}
 }
 
